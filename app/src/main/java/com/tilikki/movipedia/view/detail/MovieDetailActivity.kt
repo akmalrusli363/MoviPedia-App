@@ -35,6 +35,7 @@ import com.tilikki.movipedia.model.ProductionCompany
 import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.ui.component.LoadingScreen
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
+import com.tilikki.movipedia.ui.component.subcomponent.CountryChips
 import com.tilikki.movipedia.ui.component.subcomponent.GenreChips
 import com.tilikki.movipedia.ui.component.subcomponent.ProductionCompanyChips
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
@@ -228,6 +229,20 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
+            text = "Production Countries:",
+            modifier = Modifier.padding(vertical = 4.dp),
+            style = MaterialTheme.typography.body2,
+            fontWeight = FontWeight.Medium,
+        )
+        CountryChips(
+            countries = movie.productionCountries
+        )
+    }
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
             text = "Production Companies:",
             modifier = Modifier.padding(vertical = 4.dp),
             style = MaterialTheme.typography.body2,
@@ -280,7 +295,7 @@ private fun PreviewDetailScreen() {
                         Genre(2, "romance")
                     ),
                     productionCompanies = listOf(
-                        ProductionCompany(1, "", "union", "sp")
+                        ProductionCompany(1, "union", "sp", "")
                     ),
                     productionCountries = listOf(
                         Country("USA", "us")
