@@ -48,7 +48,7 @@ fun GenreChip(
             text = genre.name,
             modifier = Modifier
                 .padding(2.dp),
-            style = MaterialTheme.typography.caption
+            style = MaterialTheme.typography.body2
         )
     }
 }

@@ -59,13 +59,13 @@ fun ProductionCompanyChips(
 
 @Preview
 @Composable
-fun PreviewProductionCompanyChip() {
+private fun PreviewProductionCompanyChip() {
     ProductionCompanyChip(productionCompany = ProductionCompany(123, "Universal", "US", ""))
 }
 
 @Preview
 @Composable
-fun PreviewProductionCompanyChips() {
+private fun PreviewProductionCompanyChips() {
     val productionCompanies = listOf(
         ProductionCompany(1, "Universal Studio", "US", ""),
         ProductionCompany(2, "Dragon Production", "cn", ""),
