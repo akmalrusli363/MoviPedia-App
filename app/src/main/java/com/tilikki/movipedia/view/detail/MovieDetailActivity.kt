@@ -5,48 +5,42 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
-import coil.size.Scale
-import coil.size.Size
-import com.tilikki.movipedia.R
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.MovieDetail
-import com.tilikki.movipedia.ui.component.ErrorScreen
+import com.tilikki.movipedia.model.ProductionCompany
+import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.ui.component.LoadingScreen
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
+import com.tilikki.movipedia.ui.component.subcomponent.GenreChips
+import com.tilikki.movipedia.ui.component.subcomponent.ProductionCompanyChips
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.ui.theme.WhiteAlt
 import com.tilikki.movipedia.ui.util.DotSeparator
+import com.tilikki.movipedia.ui.util.OverlappingAsyncImage
 import com.tilikki.movipedia.util.ConditionalComponent
 import com.tilikki.movipedia.util.generateLoremIpsumString
 import java.text.SimpleDateFormat
@@ -102,6 +96,22 @@ fun MovieDetailScreen(viewModel: MovieDetailViewModel, movieId: Int) {
     }
 }
 
+private fun backdropToScreenConstraint(): ConstraintSet {
+    return ConstraintSet {
+        val backdrop = createRefFor("image_backdrop")
+        val detailScreen = createRefFor("detail_screen")
+
+        constrain(backdrop) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        constrain(detailScreen) {
+            top.linkTo(backdrop.top, 64.dp)
+        }
+    }
+}
+
 @Composable
 private fun MovieDetailContent(movie: MovieDetail) {
     Scaffold(
@@ -118,113 +128,24 @@ private fun MovieDetailContent(movie: MovieDetail) {
                 .verticalScroll(rememberScrollState()),
             color = MaterialTheme.colors.background
         ) {
-            Column {
-                AsyncImage(
+            ConstraintLayout(constraintSet = backdropToScreenConstraint()) {
+                OverlappingAsyncImage(
                     model = movie.generateBackdropPath(),
                     placeholder = ColorPainter(Color.Gray),
                     contentDescription = movie.title,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight(CenterVertically)
-                        .align(Alignment.CenterHorizontally)
-                        .defaultMinSize(minHeight = 120.dp),
+                        .wrapContentHeight(Alignment.CenterVertically)
+                        .defaultMinSize(minHeight = 120.dp)
+                        .layoutId("image_backdrop"),
                     contentScale = ContentScale.FillWidth
                 )
-                Column(modifier = Modifier.padding(16.dp)) {
-                    AsyncImage(
-                        model = movie.generatePosterPath(),
-                        placeholder = ColorPainter(Color.Gray),
-                        contentDescription = movie.title,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .wrapContentSize()
-                            .padding(bottom = 4.dp)
-                            .defaultMinSize(minHeight = 120.dp)
-                            .align(Alignment.CenterHorizontally),
-                        contentScale = ContentScale.Fit
-                    )
-                    Text(
-                        text = movie.title,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = MaterialTheme.typography.h6
-                    )
-                    ConditionalComponent(
-                        string = movie.title,
-                        otherConditions = movie.originalTitleEqualToTitle()
-                    ) {
-                        Text(
-                            text = movie.originalTitle,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                            style = MaterialTheme.typography.subtitle2,
-                            fontStyle = FontStyle.Italic
-                        )
-                    }
-                    ConditionalComponent(string = movie.tagline) {
-                        Text(
-                            text = movie.tagline,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                            style = MaterialTheme.typography.body1
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = movie.status,
-                            modifier = Modifier.padding(end = 4.dp),
-                            style = MaterialTheme.typography.body2,
-                            fontWeight = FontWeight.Bold
-                        )
-                        DotSeparator(Modifier.padding(horizontal = 4.dp))
-                        Text(
-                            text = movie.formatReleaseDate(SimpleDateFormat.LONG),
-                            modifier = Modifier.padding(horizontal = 4.dp),
-                            style = MaterialTheme.typography.body2
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Genre:",
-                            modifier = Modifier.padding(end = 4.dp),
-                            style = MaterialTheme.typography.body1,
-                            fontWeight = FontWeight.Medium,
-                        )
-                        GenreChips(
-                            genres = movie.genres,
-                            modifier = Modifier.padding(horizontal = 4.dp)
-                        )
-                    }
-                    Card(
-                        backgroundColor = WhiteAlt,
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp, vertical = 8.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "Synopsis",
-                                style = MaterialTheme.typography.subtitle1,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = movie.overview,
-                                modifier = Modifier
-                                    .padding(vertical = 4.dp)
-                                    .fillMaxWidth(),
-                                color = Color.DarkGray,
-                                style = MaterialTheme.typography.body2
-                            )
-                        }
-                    }
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .layoutId("detail_screen")
+                ) {
+                    InnerMovieDetailContent(movie)
                 }
             }
         }
@@ -232,27 +153,113 @@ private fun MovieDetailContent(movie: MovieDetail) {
 }
 
 @Composable
-fun GenreChips(
-    genres: List<Genre>,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.LightGray,
-    shape: Shape = RoundedCornerShape(8.dp)
-) {
-    LazyRow(modifier = modifier) {
-        items(genres) { genre ->
-            Box(
+private fun InnerMovieDetailContent(movie: MovieDetail) {
+    AsyncImage(
+        model = movie.generatePosterPath(),
+        placeholder = ColorPainter(Color.Gray),
+        contentDescription = movie.title,
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .wrapContentSize()
+            .shadow(4.dp)
+            .padding(bottom = 4.dp)
+            .defaultMinSize(minHeight = 120.dp, minWidth = 80.dp),
+        contentScale = ContentScale.Fit
+    )
+    Text(
+        text = movie.title,
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        style = MaterialTheme.typography.h6
+    )
+    ConditionalComponent(
+        string = movie.title,
+        otherConditions = movie.originalTitleEqualToTitle()
+    ) {
+        Text(
+            text = movie.originalTitle,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            style = MaterialTheme.typography.subtitle2,
+            fontStyle = FontStyle.Italic
+        )
+    }
+    ConditionalComponent(string = movie.tagline) {
+        Text(
+            text = movie.tagline,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+            style = MaterialTheme.typography.body1
+        )
+    }
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Genre:",
+            modifier = Modifier.padding(end = 4.dp),
+            style = MaterialTheme.typography.body1,
+            fontWeight = FontWeight.Medium,
+        )
+        GenreChips(
+            genres = movie.genres,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        )
+    }
+    Row(
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = movie.status,
+            modifier = Modifier.padding(end = 4.dp),
+            style = MaterialTheme.typography.body2,
+            fontWeight = FontWeight.Bold
+        )
+        DotSeparator(Modifier.padding(horizontal = 4.dp))
+        Text(
+            text = movie.formatReleaseDate(SimpleDateFormat.LONG),
+            modifier = Modifier.padding(horizontal = 4.dp),
+            style = MaterialTheme.typography.body2
+        )
+    }
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = "Production Companies:",
+            modifier = Modifier.padding(vertical = 4.dp),
+            style = MaterialTheme.typography.body2,
+            fontWeight = FontWeight.Medium,
+        )
+        ProductionCompanyChips(
+            productionCompanies = movie.productionCompanies
+        )
+    }
+    Card(
+        backgroundColor = WhiteAlt,
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Synopsis",
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = movie.overview,
                 modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .background(color = backgroundColor, shape = shape)
-                    .padding(horizontal = 4.dp)
-            ) {
-                Text(
-                    text = genre.name,
-                    modifier = Modifier
-                        .padding(4.dp),
-                    style = MaterialTheme.typography.body2
-                )
-            }
+                    .padding(vertical = 4.dp)
+                    .fillMaxWidth(),
+                color = Color.DarkGray,
+                style = MaterialTheme.typography.body2
+            )
         }
     }
 }
@@ -271,6 +278,12 @@ private fun PreviewDetailScreen() {
                     genres = listOf(
                         Genre(1, "comedy"),
                         Genre(2, "romance")
+                    ),
+                    productionCompanies = listOf(
+                        ProductionCompany(1, "", "union", "sp")
+                    ),
+                    productionCountries = listOf(
+                        Country("USA", "us")
                     ),
                     tagline = "film dunia",
                     language = "en",
@@ -301,36 +314,5 @@ private fun PreviewDetailScreenMinimalData() {
                 )
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewGenreChips() {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        GenreChips(
-            genres = listOf(
-                Genre(1, "lmao"),
-                Genre(2, "adventure"),
-                Genre(3, "romance"),
-            )
-        )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewGenreChipsOverflow() {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        GenreChips(
-            genres = listOf(
-                Genre(1, "lmao"),
-                Genre(2, "adventure"),
-                Genre(3, "romance"),
-                Genre(4, "k-drama"),
-                Genre(5, "anime"),
-                Genre(6, "family friendly"),
-            )
-        )
     }
 }

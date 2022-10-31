@@ -1,4 +1,4 @@
-package com.tilikki.movipedia.ui.component
+package com.tilikki.movipedia.ui.util
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import com.tilikki.movipedia.ui.theme.Orange700
 import com.tilikki.movipedia.ui.theme.WhiteAlt

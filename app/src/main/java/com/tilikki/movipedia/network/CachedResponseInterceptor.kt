@@ -21,6 +21,6 @@ class CachedResponseInterceptor(
             .removeHeader("Pragma")
             .removeHeader("Cache-Control")
             .header("Cache-Control", cacheControl.toString())
-            .build();
+            .build()
     }
 }

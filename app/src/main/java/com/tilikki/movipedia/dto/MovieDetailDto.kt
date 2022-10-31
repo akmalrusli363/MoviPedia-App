@@ -1,7 +1,6 @@
 package com.tilikki.movipedia.dto
 
 import com.google.gson.annotations.SerializedName
-import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.model.MovieDetail
 
 data class MovieDetailDto(
@@ -19,6 +18,7 @@ data class MovieDetailDto(
     @SerializedName("poster_path") val posterPath: String,
     @SerializedName("original_language") val language: String,
     @SerializedName("production_companies") val productionCompanies: List<ProductionCompanyDto>,
+    @SerializedName("production_countries") val productionCountries: List<CountryDto>,
     @SerializedName("release_date") val releaseDate: String,
     @SerializedName("vote_average") val voteAverage: Double,
     @SerializedName("vote_count") val voteCount: Int,
@@ -37,7 +37,8 @@ data class MovieDetailDto(
             tagline = tagline,
             imdbID = imdbID,
             genres = genres.map(GenreDto::toDomainGenre),
-            productionCompanies = productionCompanies.map(ProductionCompanyDto::name),
+            productionCompanies = productionCompanies.map(ProductionCompanyDto::toDomainProductionCompany),
+            productionCountries = productionCountries.map(CountryDto::toDomainCountry),
             voteCount = voteCount,
             voteAverage = voteAverage,
         )

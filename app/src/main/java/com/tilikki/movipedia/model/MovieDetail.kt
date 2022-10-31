@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.model
 
+import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.repository.AppConfigRepository
 import com.tilikki.movipedia.util.DateParser
 
@@ -16,7 +17,8 @@ data class MovieDetail(
     val imdbID: String? = null,
     val tagline: String = "",
     val genres: List<Genre> = listOf(),
-    val productionCompanies: List<String> = listOf(),
+    val productionCompanies: List<ProductionCompany> = listOf(),
+    val productionCountries: List<Country> = listOf(),
     val voteCount: Int = 0,
     val voteAverage: Double = 0.0,
 ) {

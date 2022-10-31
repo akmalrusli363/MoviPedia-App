@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.R
-import com.tilikki.movipedia.ui.component.TonedBottomNavigationBar
+import com.tilikki.movipedia.ui.util.TonedBottomNavigationBar
 
 private val DarkColorPalette = darkColors(
     primary = Yellow400,
@@ -73,7 +73,7 @@ private fun PreviewElement(darkMode: Boolean) {
                 )
             },
             bottomBar = {
-                TonedBottomNavigationBar() {
+                TonedBottomNavigationBar {
                     BottomNavigationItem(
                         selected = true,
                         label = { Text("hello") },
