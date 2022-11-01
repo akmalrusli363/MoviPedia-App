@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.network
 
 import android.content.Context
+import com.tilikki.movipedia.BuildConfig
 import com.tilikki.movipedia.util.TimeInterval
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
     const val BASE_URL = "https://api.themoviedb.org/3/"
-    private const val API_KEY = ""
+    private const val API_KEY = BuildConfig.TMDB_API_KEY
 
     fun getRetrofitInstance(): Retrofit {
         return Retrofit.Builder()
