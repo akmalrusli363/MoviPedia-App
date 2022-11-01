@@ -20,20 +20,6 @@ import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.ui.theme.getChipBackgroundColor
 
 @Composable
-fun GenreChips(
-    genres: List<Genre>,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.LightGray,
-    shape: Shape = RoundedCornerShape(8.dp)
-) {
-    LazyRow(modifier = modifier) {
-        items(genres) { genre ->
-            GenreChip(genre, backgroundColor, shape)
-        }
-    }
-}
-
-@Composable
 fun GenreChip(
     genre: Genre,
     backgroundColor: Color = getChipBackgroundColor(),
@@ -51,6 +37,20 @@ fun GenreChip(
                 .padding(2.dp),
             style = MaterialTheme.typography.body2
         )
+    }
+}
+
+@Composable
+fun GenreChips(
+    genres: List<Genre>,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = getChipBackgroundColor(),
+    shape: Shape = RoundedCornerShape(8.dp)
+) {
+    LazyRow(modifier = modifier) {
+        items(genres) { genre ->
+            GenreChip(genre, backgroundColor, shape)
+        }
     }
 }
 

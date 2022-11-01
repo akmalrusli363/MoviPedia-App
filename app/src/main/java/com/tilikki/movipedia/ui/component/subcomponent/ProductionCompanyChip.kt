@@ -48,7 +48,7 @@ fun ProductionCompanyChip(
 fun ProductionCompanyChips(
     productionCompanies: List<ProductionCompany>,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.LightGray,
+    backgroundColor: Color = getChipBackgroundColor(),
     shape: Shape = RoundedCornerShape(8.dp)
 ) {
     LazyRow(modifier = modifier) {

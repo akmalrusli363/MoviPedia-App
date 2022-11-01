@@ -44,7 +44,7 @@ fun CountryChip(
 fun CountryChips(
     countries: List<Country>,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.LightGray,
+    backgroundColor: Color = getChipBackgroundColor(),
     shape: Shape = RoundedCornerShape(8.dp)
 ) {
     LazyRow(modifier = modifier) {

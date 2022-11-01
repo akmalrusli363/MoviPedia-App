@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.view.detail
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -340,6 +341,39 @@ private fun PreviewDetailScreenMinimalData() {
                     genres = listOf(
                         Genre(13, "horror")
                     ),
+                )
+            )
+        }
+    }
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun PreviewDetailScreenDarkTheme() {
+    MoviPediaTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            MovieDetailContent(
+                MovieDetail(
+                    id = 1,
+                    title = "title",
+                    originalTitle = "judul",
+                    releaseDate = "22-09-2020",
+                    genres = listOf(
+                        Genre(1, "comedy"),
+                        Genre(2, "romance")
+                    ),
+                    productionCompanies = listOf(
+                        ProductionCompany(1, "union", "sp", "")
+                    ),
+                    productionCountries = listOf(
+                        Country("USA", "us"), Country("Korea", "kr")
+                    ),
+                    tagline = "film dunia",
+                    language = "en",
+                    status = "released",
+                    overview = generateLoremIpsumString(20),
+                    backdropPath = "/d6MhreFdMHONqX3iZlJGCF8UkIt.jpg",
+                    posterPath = "/3zXceNTtyj5FLjwQXuPvLYK5YYL.jpg"
                 )
             )
         }
