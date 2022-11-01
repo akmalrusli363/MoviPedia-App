@@ -15,12 +15,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.model.ProductionCompany
+import com.tilikki.movipedia.ui.theme.getChipBackgroundColor
 import com.tilikki.movipedia.util.generateCountryFlagEmoji
 
 @Composable
 fun ProductionCompanyChip(
     productionCompany: ProductionCompany,
-    backgroundColor: Color = Color.LightGray,
+    backgroundColor: Color = getChipBackgroundColor(),
     shape: Shape = RoundedCornerShape(8.dp)
 ) {
     Box(

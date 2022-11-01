@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.model.Genre
+import com.tilikki.movipedia.ui.theme.getChipBackgroundColor
 
 @Composable
 fun GenreChips(
@@ -35,7 +36,7 @@ fun GenreChips(
 @Composable
 fun GenreChip(
     genre: Genre,
-    backgroundColor: Color = Color.LightGray,
+    backgroundColor: Color = getChipBackgroundColor(),
     shape: Shape = RoundedCornerShape(8.dp)
 ) {
     Box(

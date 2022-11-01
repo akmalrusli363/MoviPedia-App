@@ -38,8 +38,10 @@ import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
 import com.tilikki.movipedia.ui.component.subcomponent.CountryChips
 import com.tilikki.movipedia.ui.component.subcomponent.GenreChips
 import com.tilikki.movipedia.ui.component.subcomponent.ProductionCompanyChips
+import com.tilikki.movipedia.ui.component.subcomponent.RatingCard
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
-import com.tilikki.movipedia.ui.theme.WhiteAlt
+import com.tilikki.movipedia.ui.theme.getCardBackgroundColor
+import com.tilikki.movipedia.ui.theme.getParagraphTextColor
 import com.tilikki.movipedia.ui.util.DotSeparator
 import com.tilikki.movipedia.ui.util.OverlappingAsyncImage
 import com.tilikki.movipedia.util.ConditionalComponent
@@ -171,7 +173,7 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
     Text(
         text = movie.title,
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-        style = MaterialTheme.typography.h6
+        style = MaterialTheme.typography.h5
     )
     ConditionalComponent(
         string = movie.title,
@@ -253,7 +255,7 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
         )
     }
     Card(
-        backgroundColor = WhiteAlt,
+        backgroundColor = getCardBackgroundColor(),
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)
     ) {
@@ -272,7 +274,7 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
                 modifier = Modifier
                     .padding(vertical = 4.dp)
                     .fillMaxWidth(),
-                color = Color.DarkGray,
+                color = getParagraphTextColor(),
                 style = MaterialTheme.typography.body2
             )
         }

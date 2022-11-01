@@ -15,21 +15,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.tilikki.movipedia.model.Movie
-import com.tilikki.movipedia.ui.theme.WhiteAlt
 import com.tilikki.movipedia.R
+import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.ui.theme.getCardBackgroundColor
 import com.tilikki.movipedia.view.detail.MovieDetailActivity
 import java.text.SimpleDateFormat
 
 @Composable
 fun MovieCard(movie: Movie, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    Card(backgroundColor = WhiteAlt, modifier = modifier.padding(8.dp).clickable {
+    val openMovieDetailActivityAction = {
         val intent = Intent(context, MovieDetailActivity::class.java).apply {
             this.putExtra("movie_id", movie.id)
         }
         context.startActivity(intent)
-    }) {
+    }
+    Card(
+        backgroundColor = getCardBackgroundColor(),
+        modifier = modifier
+            .padding(8.dp)
+            .clickable { openMovieDetailActivityAction() }
+    ) {
         Column {
             AsyncImage(
                 model = movie.generatePosterPath(),
