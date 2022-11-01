@@ -279,6 +279,18 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
             )
         }
     }
+
+    Card(
+        backgroundColor = getCardBackgroundColor(),
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)
+    ) {
+        RatingCard(
+            rating = movie.voteAverage, users = movie.voteCount, modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+    }
 }
 
 @Preview
