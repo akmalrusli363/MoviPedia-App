@@ -14,9 +14,14 @@ class MainViewModel : ViewModel() {
         get() = _movieList
     val upcomingMovieList: LiveData<List<Movie>>
         get() = _upcomingMovieList
+    val topRatedMovieList: LiveData<List<Movie>>
+        get() = _topRatedMovieList
 
     private var _movieList: MutableLiveData<List<Movie>> = MutableLiveData()
     private var _upcomingMovieList: MutableLiveData<List<Movie>> = MutableLiveData()
+    private var _topRatedMovieList: MutableLiveData<List<Movie>> = MutableLiveData()
+
+    private val movieRepository: MovieRepository by lazy(::MovieRepositoryImpl)
 
     fun getMovieList() {
         val movieRepository: MovieRepository = MovieRepositoryImpl()
@@ -25,7 +30,7 @@ class MainViewModel : ViewModel() {
             .subscribe({
                 Log.d("MvFetcher", it.toString())
                 val movieList = it.result.map { res -> res.toDomainMovie() }
-               _movieList.postValue(movieList)
+                _movieList.postValue(movieList)
             }, { err ->
                 Log.e("MvFetcher", err.message, err)
             })
@@ -39,6 +44,18 @@ class MainViewModel : ViewModel() {
                 Log.d("MvFetcher", it.toString())
                 val movieList = it.result.map { res -> res.toDomainMovie() }
                 _movieList.postValue(movieList)
+            }, { err ->
+                Log.e("MvFetcher", err.message, err)
+            })
+    }
+
+    fun getTopRatedMovieList() {
+        movieRepository.getTopRatedMovieList()
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                Log.d("MvFetcher", it.toString())
+                val movieList = it.result.map { res -> res.toDomainMovie() }
+                _topRatedMovieList.postValue(movieList)
             }, { err ->
                 Log.e("MvFetcher", err.message, err)
             })

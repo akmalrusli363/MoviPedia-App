@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.tilikki.movipedia.view.main.HomeScreen
 import com.tilikki.movipedia.view.main.MainViewModel
+import com.tilikki.movipedia.view.main.TopRatedMovieScreen
 import com.tilikki.movipedia.view.main.UpcomingMovieScreen
 
 @Composable
@@ -14,11 +15,14 @@ fun NavGraph (navController: NavHostController, mainViewModel: MainViewModel){
         navController = navController,
         startDestination = Screens.FeaturedMovies.route)
     {
-        composable(route = Screens.FeaturedMovies.route){
+        composable(route = Screens.FeaturedMovies.route) {
             HomeScreen(mainViewModel)
         }
-        composable(route = Screens.UpcomingMovies.route){
+        composable(route = Screens.UpcomingMovies.route) {
             UpcomingMovieScreen(mainViewModel)
+        }
+        composable(route = Screens.TopRatedMovies.route) {
+            TopRatedMovieScreen(mainViewModel)
         }
     }
 }

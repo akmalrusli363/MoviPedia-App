@@ -1,8 +1,6 @@
 package com.tilikki.movipedia.view.navigation
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.tilikki.movipedia.R
 
 data class BarItem(
@@ -19,7 +17,12 @@ object HomeScreenNavBarItems {
             route = "featured_movies"
         ),
         BarItem(
-            title = "Upcoming Movies",
+            title = "Top Rated",
+            image = R.drawable.ic_baseline_star_24,
+            route = "top_rated_movies"
+        ),
+        BarItem(
+            title = "Upcoming",
             image = R.drawable.ic_baseline_upcoming_24,
             route = "upcoming_movies"
         ),

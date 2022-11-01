@@ -19,6 +19,10 @@ class MovieRepositoryImpl : MovieRepository {
         return movieInterface.getUpcomingMovieList(page = 1)
     }
 
+    override fun getTopRatedMovieList(): Single<ListResponse<MovieDto>> {
+        return movieInterface.getTopRatedMovieList(page = 1)
+    }
+
     override fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>> {
         TODO("Not yet implemented")
     }
