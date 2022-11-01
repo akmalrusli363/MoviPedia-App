@@ -18,7 +18,7 @@ import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 
 @Composable
 fun UpcomingMovieScreen(viewModel: MainViewModel) {
-    val movieList by viewModel.movieList.observeAsState()
+    val movieList by viewModel.upcomingMovieList.observeAsState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getUpcomingMovieList()

@@ -190,7 +190,7 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
     ConditionalComponent(string = movie.tagline) {
         Text(
             text = movie.tagline,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             style = MaterialTheme.typography.body1
         )
     }

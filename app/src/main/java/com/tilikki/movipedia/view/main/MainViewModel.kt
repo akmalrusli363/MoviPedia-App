@@ -30,7 +30,7 @@ class MainViewModel : ViewModel() {
             .subscribe({
                 Log.d("MvFetcher", it.toString())
                 val movieList = it.result.map { res -> res.toDomainMovie() }
-                _movieList.postValue(movieList)
+               _movieList.postValue(movieList)
             }, { err ->
                 Log.e("MvFetcher", err.message, err)
             })
@@ -43,7 +43,7 @@ class MainViewModel : ViewModel() {
             .subscribe({
                 Log.d("MvFetcher", it.toString())
                 val movieList = it.result.map { res -> res.toDomainMovie() }
-                _movieList.postValue(movieList)
+                _upcomingMovieList.postValue(movieList)
             }, { err ->
                 Log.e("MvFetcher", err.message, err)
             })
