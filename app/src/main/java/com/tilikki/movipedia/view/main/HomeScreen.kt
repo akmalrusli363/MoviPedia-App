@@ -12,23 +12,26 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.MovieList
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
+import com.tilikki.movipedia.view.navigation.Screens
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel) {
+fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
     val movieList by viewModel.movieList.observeAsState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getMovieList()
     }
 
-    HomeScreenContent(movieList = movieList ?: emptyList())
+    HomeScreenContent(movieList = movieList ?: emptyList(), navController)
 }
 
 @Composable
-private fun HomeScreenContent(movieList: List<Movie>) {
+private fun HomeScreenContent(movieList: List<Movie>, navController: NavController) {
     Column {
         Text(
             text = "Featured movies",
@@ -39,7 +42,10 @@ private fun HomeScreenContent(movieList: List<Movie>) {
         )
         MovieList(
             movieList = movieList,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            onMovieCardItemClick = { movieId ->
+                Screens.MovieDetail.navigateTo(navController, movieId)
+            }
         )
     }
 }
@@ -54,6 +60,6 @@ private fun DefaultPreview() {
     )
 
     MoviPediaTheme {
-        HomeScreenContent(movieList)
+        HomeScreenContent(movieList, rememberNavController())
     }
 }

@@ -9,10 +9,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.tilikki.movipedia.model.Movie
 
 @Composable
-fun MovieList(movieList: List<Movie>, modifier: Modifier = Modifier) {
+fun MovieList(
+    movieList: List<Movie>,
+    modifier: Modifier = Modifier,
+    onMovieCardItemClick: (Int) -> Unit = {},
+) {
     LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = modifier) {
         items(movieList) { movie ->
-            MovieCard(movie = movie)
+            MovieCard(movie = movie, onMovieCardClick = onMovieCardItemClick)
         }
     }
 }

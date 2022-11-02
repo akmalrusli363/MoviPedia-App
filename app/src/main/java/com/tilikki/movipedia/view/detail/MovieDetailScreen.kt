@@ -1,11 +1,7 @@
 package com.tilikki.movipedia.view.detail
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,8 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -22,20 +16,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.MovieDetail
 import com.tilikki.movipedia.model.ProductionCompany
 import com.tilikki.movipedia.model.general.Country
-import com.tilikki.movipedia.ui.component.LoadingScreen
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
+import com.tilikki.movipedia.ui.component.NavigableLoadingScreen
 import com.tilikki.movipedia.ui.component.subcomponent.CountryChips
 import com.tilikki.movipedia.ui.component.subcomponent.GenreChips
 import com.tilikki.movipedia.ui.component.subcomponent.ProductionCompanyChips
@@ -47,56 +42,32 @@ import com.tilikki.movipedia.ui.util.DotSeparator
 import com.tilikki.movipedia.ui.util.OverlappingAsyncImage
 import com.tilikki.movipedia.util.ConditionalComponent
 import com.tilikki.movipedia.util.generateLoremIpsumString
+import com.tilikki.movipedia.view.navigation.NavigationBackButton
 import java.text.SimpleDateFormat
 
-class MovieDetailActivity : ComponentActivity() {
-
-    private val viewModel: MovieDetailViewModel by lazy {
-        ViewModelProvider(this)[MovieDetailViewModel::class.java]
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val movieId: Int = try {
-            requireMovieId()
-        } catch (e: Exception) {
-            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-            Log.e("MvFetcher", e.message, e)
-            finish()
-            throw e
-        }
-
-        setContent {
-            MoviPediaTheme {
-                // A surface container using the 'background' color from the theme
-                MovieDetailScreen(viewModel, movieId)
-            }
-        }
-    }
-
-    private fun requireMovieId(): Int {
-        val movieId = intent.getIntExtra("movie_id", Integer.MIN_VALUE)
-        Log.d("MvFetch", "fetch movie id $movieId")
-        if (movieId == Integer.MIN_VALUE) {
-            throw IllegalArgumentException("No movie ID provided!")
-        }
-        return movieId
-    }
-}
-
 @Composable
-fun MovieDetailScreen(viewModel: MovieDetailViewModel, movieId: Int) {
-    val movieDetail by viewModel.movieDetail.observeAsState()
-    val isLoading by viewModel.isLoading.observeAsState()
+fun MovieDetailScreen(
+    viewModel: MovieDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    movieId: Int,
+    navController: NavHostController? = null
+) {
+    if (movieId == Integer.MIN_VALUE) {
+        val error = IllegalArgumentException("No movie ID provided!")
+        Toast.makeText(LocalContext.current, error.message, Toast.LENGTH_LONG).show()
+        MovieNotFoundScreen(error)
+        return
+    }
+    val movieDetail = viewModel.movieDetail
+    val isLoading = viewModel.isLoading
     LaunchedEffect(key1 = Unit) {
         viewModel.getMovieDetail(movieId)
     }
-    if (isLoading != false) {
-        LoadingScreen()
+    if (isLoading) {
+        NavigableLoadingScreen(navHostController = navController)
     } else if (movieDetail == null) {
         MovieNotFoundScreen(null)
     } else {
-        MovieDetailContent(movie = movieDetail!!)
+        MovieDetailContent(movie = movieDetail, navController = navController)
     }
 }
 
@@ -117,11 +88,12 @@ private fun backdropToScreenConstraint(): ConstraintSet {
 }
 
 @Composable
-private fun MovieDetailContent(movie: MovieDetail) {
+private fun MovieDetailContent(movie: MovieDetail, navController: NavHostController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = movie.title) }
+                title = { Text(text = movie.title) },
+                navigationIcon = { NavigationBackButton(navController = navController) }
             )
         }
     ) {

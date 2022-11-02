@@ -3,12 +3,11 @@ package com.tilikki.movipedia.view.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
@@ -32,16 +31,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MoviPediaTheme {
                 val navController = rememberNavController()
-                Scaffold(bottomBar = { BottomNavigationBar(navController = navController)}) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(it),
-                        color = MaterialTheme.colors.background,
-                    ) {
-                        NavGraph(navController, viewModel)
-                    }
-                }
+                NavGraph(navController, viewModel)
+
             }
         }
     }
