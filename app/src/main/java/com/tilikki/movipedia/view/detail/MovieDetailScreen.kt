@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.tilikki.movipedia.model.Genre
@@ -47,9 +48,9 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun MovieDetailScreen(
-    viewModel: MovieDetailViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     movieId: Int,
-    navController: NavHostController? = null
+    navController: NavHostController? = null,
+    viewModel: MovieDetailViewModel = viewModel()
 ) {
     if (movieId == Integer.MIN_VALUE) {
         val error = IllegalArgumentException("No movie ID provided!")

@@ -24,9 +24,9 @@ fun TopRatedMovieScreen(
     navController: NavController,
     viewModel: TopRatedMovieViewModel = viewModel()
 ) {
-    val movieList = remember { viewModel.topRatedMovieList }
+    val movieList = remember { viewModel.movieList }
     LaunchedEffect(key1 = Unit) {
-        viewModel.getTopRatedMovieList()
+        viewModel.getMovieList()
     }
     TopRatedMovieContent(movieList = movieList, navController)
 }

@@ -1,4 +1,4 @@
-package com.tilikki.movipedia.view.main
+package com.tilikki.movipedia.view.main.discovery
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +23,7 @@ fun HomeScreen(
     navController: NavController,
     viewModel: DiscoverMovieListViewModel = viewModel()
 ) {
-    val movieList = viewModel.discoverMovieList
+    val movieList = viewModel.movieList
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getMovieList()

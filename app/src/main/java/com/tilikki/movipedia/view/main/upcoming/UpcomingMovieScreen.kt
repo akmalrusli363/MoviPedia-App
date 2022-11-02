@@ -24,9 +24,9 @@ fun UpcomingMovieScreen(
     navController: NavController,
     viewModel: UpcomingMovieViewModel = viewModel()
 ) {
-    val movieList = remember { viewModel.upcomingMovieList }
+    val movieList = remember { viewModel.movieList }
     LaunchedEffect(key1 = Unit) {
-        viewModel.getUpcomingMovieList()
+        viewModel.getMovieList()
     }
     UpcomingMovieContent(movieList = movieList, navController)
 }

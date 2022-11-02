@@ -5,7 +5,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.tilikki.movipedia.view.detail.MovieDetailScreen
-import com.tilikki.movipedia.view.main.HomeScreen
+import com.tilikki.movipedia.view.main.discovery.HomeScreen
 import com.tilikki.movipedia.view.main.top_rated.TopRatedMovieScreen
 import com.tilikki.movipedia.view.main.upcoming.UpcomingMovieScreen
 

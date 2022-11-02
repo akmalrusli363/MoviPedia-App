@@ -11,16 +11,28 @@ class MovieRepositoryImpl : MovieRepository {
     private val retrofit = RetrofitInstance.getRetrofitInstance()
     private val movieInterface = retrofit.create(MovieInterface::class.java)
 
-    override fun getMovieList(): Single<ListResponse<MovieDto>> {
-        return movieInterface.getDiscoverMovieList(page = 1)
+    override fun getMovieList(
+        page: Int,
+        language: String,
+        region: String?
+    ): Single<ListResponse<MovieDto>> {
+        return movieInterface.getDiscoverMovieList(page, language, region)
     }
 
-    override fun getUpcomingMovieList(): Single<ListResponse<MovieDto>> {
-        return movieInterface.getUpcomingMovieList(page = 1)
+    override fun getUpcomingMovieList(
+        page: Int,
+        language: String,
+        region: String?
+    ): Single<ListResponse<MovieDto>> {
+        return movieInterface.getUpcomingMovieList(page, language, region)
     }
 
-    override fun getTopRatedMovieList(): Single<ListResponse<MovieDto>> {
-        return movieInterface.getTopRatedMovieList(page = 1)
+    override fun getTopRatedMovieList(
+        page: Int,
+        language: String,
+        region: String?
+    ): Single<ListResponse<MovieDto>> {
+        return movieInterface.getTopRatedMovieList(page, language, region)
     }
 
     override fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>> {

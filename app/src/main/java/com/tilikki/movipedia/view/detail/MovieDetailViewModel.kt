@@ -9,22 +9,23 @@ import androidx.lifecycle.ViewModel
 import com.tilikki.movipedia.model.MovieDetail
 import com.tilikki.movipedia.repository.MovieRepository
 import com.tilikki.movipedia.repository.MovieRepositoryImpl
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class MovieDetailViewModel : ViewModel() {
     var movieDetail: MovieDetail? by mutableStateOf(null)
     var isLoading: Boolean by mutableStateOf(false)
 
-    //    private var _movieDetail: MutableLiveData<MovieDetail> = MutableLiveData()
-//    private var _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     private var _movieId: MutableLiveData<Int> = MutableLiveData()
 
-    fun getMovieDetail(movieId: Int) {
+    fun getMovieDetail(movieId: Int): Disposable {
         _movieId.postValue(movieId)
         val movieRepository: MovieRepository = MovieRepositoryImpl()
         isLoading = true
-        movieRepository.getMovieDetail(movieId)
+        return movieRepository.getMovieDetail(movieId)
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movie ->
                 Log.d("MvFetcher", movie.toString())
                 movieDetail = movie
