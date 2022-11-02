@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.tilikki.movipedia.view.detail.MovieDetailScreen
 import com.tilikki.movipedia.view.main.discovery.HomeScreen
 import com.tilikki.movipedia.view.main.top_rated.TopRatedMovieScreen
+import com.tilikki.movipedia.view.main.trending.TrendingMovieScreen
 import com.tilikki.movipedia.view.main.upcoming.UpcomingMovieScreen
 
 @Composable
@@ -35,6 +36,11 @@ fun NavGraphBuilder.movieList(navController: NavHostController) {
         composable(route = Screens.FeaturedMovies.route) {
             MainScreenView(navController = navController) {
                 HomeScreen(navController)
+            }
+        }
+        composable(route = Screens.TrendingMovies.route) {
+            MainScreenView(navController = navController) {
+                TrendingMovieScreen(navController)
             }
         }
         composable(route = Screens.UpcomingMovies.route) {

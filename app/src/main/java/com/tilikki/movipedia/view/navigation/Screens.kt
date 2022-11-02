@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 sealed class Screens(val route: String) {
     object MovieList : Screens("movie_list")
     object FeaturedMovies : Screens("featured_movies")
+    object TrendingMovies : Screens("trending_movies")
     object UpcomingMovies : Screens("upcoming_movies")
     object TopRatedMovies : Screens("top_rated_movies")
     object MovieDetail : Screens("movie_detail/{movie_id}") {

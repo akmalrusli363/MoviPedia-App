@@ -17,6 +17,11 @@ object HomeScreenNavBarItems {
             route = "featured_movies"
         ),
         BarItem(
+            title = "Trending",
+            image = R.drawable.ic_baseline_trending_24,
+            route = "trending_movies"
+        ),
+        BarItem(
             title = "Top Rated",
             image = R.drawable.ic_baseline_star_24,
             route = "top_rated_movies"

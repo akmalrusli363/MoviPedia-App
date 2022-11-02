@@ -4,6 +4,7 @@ import com.tilikki.movipedia.dto.ListResponse
 import com.tilikki.movipedia.dto.MovieDetailDto
 import com.tilikki.movipedia.dto.MovieDto
 import com.tilikki.movipedia.helper.Constants
+import com.tilikki.movipedia.model.general.TimeRangeType
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -33,6 +34,14 @@ interface MovieInterface {
 
     @GET("movie/upcoming")
     fun getUpcomingMovieList(
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+        @Query("region") region: String? = null,
+    ): Single<ListResponse<MovieDto>>
+
+    @GET("trending/movie/{time_window}")
+    fun getTrendingMovieList(
+        @Path("time_window") timeRangeType: TimeRangeType,
         @Query("page") page: Int = 1,
         @Query("language") language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
         @Query("region") region: String? = null,

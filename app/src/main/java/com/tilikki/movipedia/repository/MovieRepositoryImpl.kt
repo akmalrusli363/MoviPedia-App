@@ -3,6 +3,7 @@ package com.tilikki.movipedia.repository
 import com.tilikki.movipedia.dto.ListResponse
 import com.tilikki.movipedia.dto.MovieDto
 import com.tilikki.movipedia.model.MovieDetail
+import com.tilikki.movipedia.model.general.TimeRangeType
 import com.tilikki.movipedia.network.RetrofitInstance
 import com.tilikki.movipedia.repository.endpoint.MovieInterface
 import io.reactivex.Single
@@ -33,6 +34,15 @@ class MovieRepositoryImpl : MovieRepository {
         region: String?
     ): Single<ListResponse<MovieDto>> {
         return movieInterface.getTopRatedMovieList(page, language, region)
+    }
+
+    override fun getTrendingMovieList(
+        page: Int,
+        timeRangeType: TimeRangeType,
+        language: String,
+        region: String?
+    ): Single<ListResponse<MovieDto>> {
+        return movieInterface.getTrendingMovieList(timeRangeType, page, language, region)
     }
 
     override fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>> {
