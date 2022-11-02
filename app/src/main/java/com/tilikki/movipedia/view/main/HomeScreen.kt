@@ -7,11 +7,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.tilikki.movipedia.model.Movie
@@ -20,14 +19,17 @@ import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.view.navigation.Screens
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
-    val movieList by viewModel.movieList.observeAsState()
+fun HomeScreen(
+    navController: NavController,
+    viewModel: DiscoverMovieListViewModel = viewModel()
+) {
+    val movieList = viewModel.discoverMovieList
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getMovieList()
     }
 
-    HomeScreenContent(movieList = movieList ?: emptyList(), navController)
+    HomeScreenContent(movieList = movieList, navController)
 }
 
 @Composable

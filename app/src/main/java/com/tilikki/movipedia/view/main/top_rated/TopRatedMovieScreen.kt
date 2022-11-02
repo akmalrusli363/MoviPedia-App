@@ -1,4 +1,4 @@
-package com.tilikki.movipedia.view.main
+package com.tilikki.movipedia.view.main.top_rated
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,28 +7,32 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.MovieList
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
+import com.tilikki.movipedia.view.navigation.Screens
 
 @Composable
-fun TopRatedMovieScreen(viewModel: MainViewModel) {
-    val movieList by viewModel.topRatedMovieList.observeAsState()
-
+fun TopRatedMovieScreen(
+    navController: NavController,
+    viewModel: TopRatedMovieViewModel = viewModel()
+) {
+    val movieList = remember { viewModel.topRatedMovieList }
     LaunchedEffect(key1 = Unit) {
         viewModel.getTopRatedMovieList()
     }
-
-    TopRatedMovieContent(movieList = movieList ?: emptyList())
+    TopRatedMovieContent(movieList = movieList, navController)
 }
 
 @Composable
-private fun TopRatedMovieContent(movieList: List<Movie>) {
+private fun TopRatedMovieContent(movieList: List<Movie>, navController: NavController) {
     Column {
         Text(
             text = "Top rated movies",
@@ -39,7 +43,10 @@ private fun TopRatedMovieContent(movieList: List<Movie>) {
         )
         MovieList(
             movieList = movieList,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            onMovieCardItemClick = { movieId ->
+                Screens.MovieDetail.navigateTo(navController, movieId)
+            }
         )
     }
 }
@@ -55,6 +62,6 @@ private fun PreviewTopRatedMovie() {
     )
 
     MoviPediaTheme {
-        TopRatedMovieContent(movieList)
+        TopRatedMovieContent(movieList, navController = rememberNavController())
     }
 }

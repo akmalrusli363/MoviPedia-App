@@ -1,4 +1,4 @@
-package com.tilikki.movipedia.view.main
+package com.tilikki.movipedia.view.main.upcoming
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,28 +7,32 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.MovieList
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
+import com.tilikki.movipedia.view.navigation.Screens
 
 @Composable
-fun UpcomingMovieScreen(viewModel: MainViewModel) {
-    val movieList by viewModel.upcomingMovieList.observeAsState()
-
+fun UpcomingMovieScreen(
+    navController: NavController,
+    viewModel: UpcomingMovieViewModel = viewModel()
+) {
+    val movieList = remember { viewModel.upcomingMovieList }
     LaunchedEffect(key1 = Unit) {
         viewModel.getUpcomingMovieList()
     }
-
-    UpcomingMovieContent(movieList = movieList ?: emptyList())
+    UpcomingMovieContent(movieList = movieList, navController)
 }
 
 @Composable
-private fun UpcomingMovieContent(movieList: List<Movie>) {
+private fun UpcomingMovieContent(movieList: List<Movie>, navController: NavController) {
     Column {
         Text(
             text = "Upcoming movies",
@@ -39,7 +43,10 @@ private fun UpcomingMovieContent(movieList: List<Movie>) {
         )
         MovieList(
             movieList = movieList,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            onMovieCardItemClick = { movieId ->
+                Screens.MovieDetail.navigateTo(navController, movieId)
+            }
         )
     }
 }
@@ -55,6 +62,6 @@ private fun PreviewUpcomingMovie() {
     )
 
     MoviPediaTheme {
-        UpcomingMovieContent(movieList)
+        UpcomingMovieContent(movieList, rememberNavController())
     }
 }

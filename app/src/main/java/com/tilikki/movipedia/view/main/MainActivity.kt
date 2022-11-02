@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -22,17 +21,12 @@ import com.tilikki.movipedia.view.navigation.NavGraph
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MoviPediaTheme {
                 val navController = rememberNavController()
-                NavGraph(navController, viewModel)
-
+                NavGraph(navController)
             }
         }
     }
@@ -40,13 +34,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
-
     TonedBottomNavigationBar {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
 
         HomeScreenNavBarItems.BarItems.forEach { navItem ->
-
             BottomNavigationItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
