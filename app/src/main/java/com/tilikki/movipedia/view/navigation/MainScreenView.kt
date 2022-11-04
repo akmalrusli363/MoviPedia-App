@@ -8,11 +8,10 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.tilikki.movipedia.view.main.BottomNavigationBar
 
 @Composable
 fun MainScreenView(navController: NavHostController, content: @Composable () -> Unit) {
-    Scaffold(bottomBar = { BottomNavigationBar(navController = navController) }) {
+    Scaffold(bottomBar = { HomeBottomNavigationBar(navController = navController) }) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
