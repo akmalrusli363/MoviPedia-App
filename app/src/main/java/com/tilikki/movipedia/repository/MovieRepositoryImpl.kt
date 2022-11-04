@@ -46,7 +46,7 @@ class MovieRepositoryImpl : MovieRepository {
     }
 
     override fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>> {
-        TODO("Not yet implemented")
+        return movieInterface.searchForMovies(searchQuery)
     }
 
     override fun getMovieDetail(id: Int): Single<MovieDetail> {

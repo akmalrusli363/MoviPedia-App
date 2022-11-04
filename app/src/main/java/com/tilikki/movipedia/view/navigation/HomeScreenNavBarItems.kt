@@ -31,5 +31,10 @@ object HomeScreenNavBarItems {
             image = R.drawable.ic_baseline_upcoming_24,
             route = "upcoming_movies"
         ),
+        BarItem(
+            title = "Search",
+            image = R.drawable.ic_baseline_search_24,
+            route = "search_movies"
+        ),
     )
 }

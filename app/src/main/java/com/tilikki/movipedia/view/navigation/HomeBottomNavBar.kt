@@ -20,8 +20,9 @@ fun HomeBottomNavigationBar(navController: NavHostController) {
         val currentRoute = backStackEntry?.destination?.route
 
         HomeScreenNavBarItems.BarItems.forEach { navItem ->
+            val isSelected = currentRoute == navItem.route
             BottomNavigationItem(
-                selected = currentRoute == navItem.route,
+                selected = isSelected,
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -38,7 +39,7 @@ fun HomeBottomNavigationBar(navController: NavHostController) {
                     )
                 },
                 label = {
-                    Text(text = navItem.title)
+                    Text(text = navItem.title, softWrap = false)
                 },
             )
         }

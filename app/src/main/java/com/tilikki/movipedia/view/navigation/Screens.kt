@@ -8,6 +8,7 @@ sealed class Screens(val route: String) {
     object TrendingMovies : Screens("trending_movies")
     object UpcomingMovies : Screens("upcoming_movies")
     object TopRatedMovies : Screens("top_rated_movies")
+    object SearchMovies : Screens("search_movies")
     object MovieDetail : Screens("movie_detail/{movie_id}") {
         const val MOVIE_ID = "movie_id"
         private fun routeByMovieId(movieId: Int): String {
