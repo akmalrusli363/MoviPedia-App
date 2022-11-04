@@ -2,12 +2,11 @@ package com.tilikki.movipedia.model
 
 import com.tilikki.movipedia.repository.AppConfigRepository
 import com.tilikki.movipedia.util.DateParser
-import java.text.SimpleDateFormat
 
 data class Movie(
     val id: Int,
     val title: String,
-    val releaseDate: String,
+    val releaseDate: String = "",
     val language: String = "en",
     val backdropPath: String = "",
     val posterPath: String = "",

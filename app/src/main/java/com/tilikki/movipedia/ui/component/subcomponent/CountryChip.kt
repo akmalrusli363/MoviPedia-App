@@ -32,7 +32,7 @@ fun CountryChip(
     ) {
         val countryFlag = generateCountryFlagEmoji(country.countryCode)
         Text(
-            text = "$countryFlag ${country.name}",
+            text = "$countryFlag ${country.name}".trim(),
             modifier = Modifier
                 .padding(4.dp),
             style = MaterialTheme.typography.caption

@@ -8,7 +8,7 @@ data class MovieDetail(
     val id: Int,
     val title: String,
     val originalTitle: String,
-    val releaseDate: String,
+    val releaseDate: String = "",
     val language: String = "en",
     val backdropPath: String = "",
     val posterPath: String = "",

@@ -36,7 +36,7 @@ fun ProductionCompanyChip(
             ""
         }
         Text(
-            text = "$countryFlag ${productionCompany.name}",
+            text = "$countryFlag ${productionCompany.name}".trim(),
             modifier = Modifier
                 .padding(4.dp),
             style = MaterialTheme.typography.caption

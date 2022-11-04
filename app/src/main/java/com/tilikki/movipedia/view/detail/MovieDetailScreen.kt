@@ -32,10 +32,7 @@ import com.tilikki.movipedia.model.ProductionCompany
 import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
 import com.tilikki.movipedia.ui.component.NavigableLoadingScreen
-import com.tilikki.movipedia.ui.component.subcomponent.CountryChips
-import com.tilikki.movipedia.ui.component.subcomponent.GenreChips
-import com.tilikki.movipedia.ui.component.subcomponent.ProductionCompanyChips
-import com.tilikki.movipedia.ui.component.subcomponent.RatingCard
+import com.tilikki.movipedia.ui.component.subcomponent.*
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.ui.theme.getCardBackgroundColor
 import com.tilikki.movipedia.ui.theme.getParagraphTextColor
@@ -178,10 +175,19 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
             style = MaterialTheme.typography.body1,
             fontWeight = FontWeight.Medium,
         )
-        GenreChips(
-            genres = movie.genres,
-            modifier = Modifier.padding(horizontal = 4.dp)
-        )
+        if (movie.genres.isEmpty()) {
+            Text(
+                text = "Not available",
+                modifier = Modifier.padding(horizontal = 4.dp),
+                style = MaterialTheme.typography.body1,
+                fontStyle = FontStyle.Italic,
+            )
+        } else {
+            GenreChips(
+                genres = movie.genres,
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+        }
     }
     Row(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -194,63 +200,62 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
             fontWeight = FontWeight.Bold
         )
         DotSeparator(Modifier.padding(horizontal = 4.dp))
-        Text(
-            text = movie.formatReleaseDate(SimpleDateFormat.LONG),
-            modifier = Modifier.padding(horizontal = 4.dp),
-            style = MaterialTheme.typography.body2
-        )
-    }
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    ) {
-        Text(
-            text = "Production Countries:",
-            modifier = Modifier.padding(vertical = 4.dp),
-            style = MaterialTheme.typography.body2,
-            fontWeight = FontWeight.Medium,
-        )
-        CountryChips(
-            countries = movie.productionCountries
-        )
-    }
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    ) {
-        Text(
-            text = "Production Companies:",
-            modifier = Modifier.padding(vertical = 4.dp),
-            style = MaterialTheme.typography.body2,
-            fontWeight = FontWeight.Medium,
-        )
-        ProductionCompanyChips(
-            productionCompanies = movie.productionCompanies
-        )
-    }
-    Card(
-        backgroundColor = getCardBackgroundColor(),
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-                .fillMaxWidth()
-        ) {
+        if (movie.releaseDate.isNotBlank()) {
             Text(
-                text = "Synopsis",
-                style = MaterialTheme.typography.subtitle1,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = movie.overview,
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .fillMaxWidth(),
-                color = getParagraphTextColor(),
+                text = movie.formatReleaseDate(SimpleDateFormat.LONG),
+                modifier = Modifier.padding(horizontal = 4.dp),
                 style = MaterialTheme.typography.body2
             )
+        } else {
+            Text(
+                text = "Unknown date",
+                modifier = Modifier.padding(horizontal = 4.dp),
+                style = MaterialTheme.typography.body2,
+                fontStyle = FontStyle.Italic
+            )
+        }
+    }
+    FieldWithChip(
+        title = "Production Countries",
+        list = movie.productionCountries,
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) { countries ->
+        CountryChips(countries = countries)
+    }
+    FieldWithChip(
+        title = "Production Companies",
+        list = movie.productionCompanies,
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) { productionCompanies ->
+        ProductionCompanyChips(productionCompanies = productionCompanies)
+    }
+    ConditionalComponent(string = movie.overview) {
+        Card(
+            backgroundColor = getCardBackgroundColor(),
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.padding(horizontal = 0.dp, vertical = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Synopsis",
+                    style = MaterialTheme.typography.subtitle1,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = movie.overview,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .fillMaxWidth(),
+                    color = getParagraphTextColor(),
+                    style = MaterialTheme.typography.body2
+                )
+            }
         }
     }
 
@@ -302,7 +307,7 @@ private fun PreviewDetailScreen() {
 
 @Preview
 @Composable
-private fun PreviewDetailScreenMinimalData() {
+private fun PreviewDetailScreenSimpleData() {
     MoviPediaTheme {
         Surface(color = MaterialTheme.colors.background) {
             MovieDetailContent(
@@ -314,6 +319,23 @@ private fun PreviewDetailScreenMinimalData() {
                     genres = listOf(
                         Genre(13, "horror")
                     ),
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDetailScreenMinimalData() {
+    MoviPediaTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            MovieDetailContent(
+                MovieDetail(
+                    id = 1,
+                    title = "title",
+                    originalTitle = "title",
+                    genres = listOf(),
                 )
             )
         }
