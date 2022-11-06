@@ -1,41 +1,56 @@
 package com.tilikki.movipedia.ui.component.subcomponent
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.ui.theme.getChipBackgroundColor
+import com.tilikki.movipedia.util.runIfNotNull
 
 @Composable
 fun GenreChip(
     genre: Genre,
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues = PaddingValues(),
     backgroundColor: Color = getChipBackgroundColor(),
-    shape: Shape = RoundedCornerShape(8.dp)
+    shape: Shape = RoundedCornerShape(8.dp),
+    onClickAction: ((Int) -> Unit)? = null,
 ) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 4.dp)
-            .background(color = backgroundColor, shape = shape)
-            .padding(horizontal = 4.dp)
+    val padModifier = modifier
+        .padding(horizontal = 4.dp)
+        .clip(shape)
+        .runIfNotNull(onClickAction) { onClick ->
+            return@runIfNotNull this.clickable { onClick(genre.id) }
+        }
+    Card(
+        shape = shape,
+        backgroundColor = backgroundColor,
+        modifier = padModifier
     ) {
         Text(
             text = genre.name,
             modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .padding(innerPadding)
                 .padding(2.dp),
-            style = MaterialTheme.typography.body2
+            style = MaterialTheme.typography.body2,
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -45,11 +60,17 @@ fun GenreChips(
     genres: List<Genre>,
     modifier: Modifier = Modifier,
     backgroundColor: Color = getChipBackgroundColor(),
-    shape: Shape = RoundedCornerShape(8.dp)
+    shape: Shape = RoundedCornerShape(8.dp),
+    onClickAction: ((Int) -> Unit)? = null,
 ) {
     LazyRow(modifier = modifier) {
         items(genres) { genre ->
-            GenreChip(genre, backgroundColor, shape)
+            GenreChip(
+                genre = genre,
+                backgroundColor = backgroundColor,
+                shape = shape,
+                onClickAction = onClickAction
+            )
         }
     }
 }

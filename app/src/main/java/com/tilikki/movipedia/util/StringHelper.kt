@@ -17,3 +17,7 @@ fun generateCountryFlagEmoji(countryCode: String): String {
 fun Locale.getCountryFlagEmoji(): String {
     return generateCountryFlagEmoji(country)
 }
+
+fun String.wordsToUpperUnderscore(): String {
+    return this.replace(Regex("\\s+"), "_").uppercase()
+}

@@ -2,10 +2,11 @@ package com.tilikki.movipedia.util
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 object DateParser {
+    const val ISO_DATE_TIME_INSTANT: String = "yyyy-MM-dd HH:mm:ss.SSSZ"
+
     fun convertDateFormat(
         inputDate: String,
         inputDateFormat: String,

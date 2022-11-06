@@ -24,7 +24,6 @@ fun <T> FieldWithChip(
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Row(modifier = Modifier.padding(vertical = 4.dp)) {
             Text(

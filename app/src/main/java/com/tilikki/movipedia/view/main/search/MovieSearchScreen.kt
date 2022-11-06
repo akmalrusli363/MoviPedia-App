@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,7 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.ui.component.GenrePicker
 import com.tilikki.movipedia.ui.component.MovieList
 import com.tilikki.movipedia.ui.component.subcomponent.SearchView
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
@@ -25,17 +28,31 @@ fun MovieSearchScreen(
     viewModel: MovieSearchViewModel = viewModel()
 ) {
     val movieList = remember { viewModel.movieList }
+    val genreList = remember { viewModel.genreList }
     val onSearch: (String) -> Unit = { query ->
-        viewModel.debouncedSearchOnType(query)
+        viewModel.searchMovieList(query)
     }
-    MovieSearchContent(movieList = movieList, navController, onSearch)
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getGenreList()
+    }
+    MovieSearchContent(
+        movieList = movieList,
+        genreList = genreList,
+        isSearching = viewModel.isSearching,
+        navController = navController,
+        onSearch = onSearch,
+        searchQuery = viewModel.searchQuery
+    )
 }
 
 @Composable
 fun MovieSearchContent(
-    movieList: List<Movie>?,
+    movieList: List<Movie>,
+    genreList: List<Genre>,
+    isSearching: Boolean,
     navController: NavController,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    searchQuery: String = "",
 ) {
     Column() {
         Text(
@@ -45,20 +62,25 @@ fun MovieSearchContent(
                 .padding(16.dp)
         )
         SearchView(
-            searchText = "",
+            searchText = searchQuery,
             placeholderText = "Search for movies",
             onImeAction = onSearch,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         )
-        if (movieList != null) {
+        if (isSearching) {
             MovieList(
                 movieList = movieList,
                 modifier = Modifier.padding(8.dp),
                 onMovieCardItemClick = { movieId ->
                     Screens.MovieDetail.navigateTo(navController, movieId)
                 }
+            )
+        } else {
+            GenrePicker(
+                genres = genreList,
+                modifier = Modifier.padding(8.dp),
             )
         }
     }
@@ -67,9 +89,24 @@ fun MovieSearchContent(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewMovieSearchScreenInitialState() {
-    val movieList = null
+    val movieList = listOf<Movie>()
+    val genreList = listOf(
+        Genre(1, "lmao"),
+        Genre(2, "adventure"),
+        Genre(3, "romance"),
+        Genre(4, "k-drama"),
+        Genre(5, "anime"),
+        Genre(6, "family friendly"),
+        Genre(7, "bizarre"),
+        Genre(8, "horror"),
+    )
     MoviPediaTheme {
-        MovieSearchContent(movieList, navController = rememberNavController(), onSearch = {})
+        MovieSearchContent(
+            movieList = movieList,
+            genreList = genreList,
+            isSearching = false,
+            navController = rememberNavController(),
+            onSearch = {})
     }
 }
 
@@ -82,8 +119,20 @@ private fun PreviewMovieSearchScreen() {
         Movie(id = 3, title = "Notepad", releaseDate = "2023-02-30"),
         Movie(id = 4, title = "Lost Delivery", releaseDate = "2023-03-20"),
     )
+    val genreList = listOf(
+        Genre(1, "lmao"),
+        Genre(2, "adventure"),
+        Genre(3, "romance"),
+        Genre(4, "k-drama"),
+    )
 
     MoviPediaTheme {
-        MovieSearchContent(movieList, navController = rememberNavController(), onSearch = {})
+        MovieSearchContent(
+            movieList = movieList,
+            genreList = genreList,
+            isSearching = true,
+            navController = rememberNavController(),
+            onSearch = {},
+        )
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.repository.MovieRepository
 import com.tilikki.movipedia.repository.MovieRepositoryImpl
@@ -19,7 +20,9 @@ import kotlinx.coroutines.launch
 class MovieSearchViewModel : BaseDisposableViewModel() {
 
     var searchQuery by mutableStateOf("")
+    var isSearching by mutableStateOf(false)
     val movieList: MutableList<Movie> = mutableStateListOf()
+    val genreList: MutableList<Genre> = mutableStateListOf()
 
     private val movieRepository: MovieRepository by lazy {
         MovieRepositoryImpl()
@@ -38,6 +41,7 @@ class MovieSearchViewModel : BaseDisposableViewModel() {
 
     fun searchMovieList(searchQuery: String) {
         this.searchQuery = searchQuery
+        this.isSearching = true
         val disposableFetchMovieList = movieRepository.searchForMovie(searchQuery)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -49,5 +53,19 @@ class MovieSearchViewModel : BaseDisposableViewModel() {
                 Log.e("MvFetcher", err.message, err)
             })
         compositeDisposable.addAll(disposableFetchMovieList)
+    }
+
+    fun getGenreList() {
+        val disposableFetchGenreList = movieRepository.getGenreList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d("MvFetcher", it.toString())
+                val domainGenreList = it.toDomainGenreList()
+                genreList.swapList(domainGenreList)
+            }, { err ->
+                Log.e("MvFetcher", err.message, err)
+            })
+        compositeDisposable.addAll(disposableFetchGenreList)
     }
 }

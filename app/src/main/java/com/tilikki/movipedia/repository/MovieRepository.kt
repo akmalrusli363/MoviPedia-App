@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.repository
 
+import com.tilikki.movipedia.dto.GenreListDto
 import com.tilikki.movipedia.dto.ListResponse
 import com.tilikki.movipedia.dto.MovieDto
 import com.tilikki.movipedia.helper.Constants
@@ -35,4 +36,6 @@ interface MovieRepository {
 
     fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>>
     fun getMovieDetail(id: Int): Single<MovieDetail>
+
+    fun getGenreList(): Single<GenreListDto>
 }
