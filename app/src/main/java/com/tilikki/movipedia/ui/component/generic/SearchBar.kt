@@ -1,4 +1,4 @@
-package com.tilikki.movipedia.ui.component.subcomponent
+package com.tilikki.movipedia.ui.component.generic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding

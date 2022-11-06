@@ -32,7 +32,7 @@ fun GenrePicker(
                 shape = shape,
                 onClickAction = onGenreCardItemClicked,
                 modifier = Modifier.padding(8.dp),
-                innerPadding = PaddingValues(8.dp)
+                innerPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp)
             )
         }
     }

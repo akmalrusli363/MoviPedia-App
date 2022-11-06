@@ -18,7 +18,7 @@ import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.GenrePicker
 import com.tilikki.movipedia.ui.component.MovieList
-import com.tilikki.movipedia.ui.component.subcomponent.SearchView
+import com.tilikki.movipedia.ui.component.generic.SearchView
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.view.navigation.Screens
 

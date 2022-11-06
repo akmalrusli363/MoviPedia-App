@@ -1,13 +1,9 @@
 package com.tilikki.movipedia.ui.component.subcomponent
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +11,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.model.general.Country
+import com.tilikki.movipedia.ui.component.generic.GenericChip
 import com.tilikki.movipedia.ui.theme.getChipBackgroundColor
 import com.tilikki.movipedia.util.generateCountryFlagEmoji
 
@@ -24,20 +21,13 @@ fun CountryChip(
     backgroundColor: Color = getChipBackgroundColor(),
     shape: Shape = RoundedCornerShape(8.dp)
 ) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 4.dp)
-            .background(color = backgroundColor, shape = shape)
-            .padding(horizontal = 4.dp)
-    ) {
-        val countryFlag = generateCountryFlagEmoji(country.countryCode)
-        Text(
-            text = "$countryFlag ${country.name}".trim(),
-            modifier = Modifier
-                .padding(4.dp),
-            style = MaterialTheme.typography.caption
-        )
-    }
+    val countryFlag = generateCountryFlagEmoji(country.countryCode)
+    GenericChip(
+        text = "$countryFlag ${country.name}".trim(),
+        innerPadding = PaddingValues(4.dp),
+        backgroundColor = backgroundColor,
+        shape = shape,
+    )
 }
 
 @Composable
