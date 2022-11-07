@@ -23,6 +23,7 @@ interface MovieInterface {
         @Query("page") page: Int = 1,
         @Query("language") language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
         @Query("region") region: String? = null,
+        @Query("with_genres") genreIds: String? = null,
     ): Single<ListResponse<MovieDto>>
 
     @GET("movie/top_rated")

@@ -5,6 +5,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.tilikki.movipedia.view.detail.MovieDetailScreen
+import com.tilikki.movipedia.view.main.catalogue.MovieByGenre
 import com.tilikki.movipedia.view.main.discovery.HomeScreen
 import com.tilikki.movipedia.view.main.search.MovieSearchScreen
 import com.tilikki.movipedia.view.main.top_rated.TopRatedMovieScreen
@@ -25,6 +26,16 @@ fun NavGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movie_id") ?: Integer.MIN_VALUE
             MovieDetailScreen(movieId = movieId, navController = navController)
+        }
+        composable(
+            route = Screens.MovieListByGenre.route,
+            arguments = listOf(navArgument(Screens.MovieListByGenre.GENRE_ID) {
+                type = NavType.IntType
+            })
+        ) { backStackEntry ->
+            val genreId = backStackEntry.arguments?.getInt(Screens.MovieListByGenre.GENRE_ID)
+                ?: Integer.MIN_VALUE
+            MovieByGenre(genreId = genreId, navController = navController)
         }
     }
 }

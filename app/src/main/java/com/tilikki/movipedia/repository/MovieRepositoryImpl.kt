@@ -20,7 +20,11 @@ class MovieRepositoryImpl : MovieRepository {
         language: String,
         region: String?
     ): Single<ListResponse<MovieDto>> {
-        return movieInterface.getDiscoverMovieList(page, language, region)
+        return movieInterface.getDiscoverMovieList(
+            page = page,
+            language = language,
+            region = region,
+        )
     }
 
     override fun getUpcomingMovieList(
@@ -60,5 +64,19 @@ class MovieRepositoryImpl : MovieRepository {
 
     override fun getGenreList(): Single<GenreListDto> {
         return movieParameterInterface.getGenreList()
+    }
+
+    override fun getMovieListByGenreId(
+        genreId: Int,
+        page: Int,
+        language: String,
+        region: String?,
+    ): Single<ListResponse<MovieDto>> {
+        return movieInterface.getDiscoverMovieList(
+            page = page,
+            language = language,
+            region = region,
+            genreIds = "$genreId"
+        )
     }
 }

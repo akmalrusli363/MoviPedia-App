@@ -84,6 +84,9 @@ fun MovieSearchContent(
             GenrePicker(
                 genres = genreList,
                 modifier = Modifier.padding(8.dp),
+                onGenreCardItemClicked = { genreId ->
+                    Screens.MovieListByGenre.navigateTo(navController, genreId)
+                }
             )
         }
     }

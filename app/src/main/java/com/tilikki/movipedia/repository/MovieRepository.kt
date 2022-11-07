@@ -38,4 +38,11 @@ interface MovieRepository {
     fun getMovieDetail(id: Int): Single<MovieDetail>
 
     fun getGenreList(): Single<GenreListDto>
+
+    fun getMovieListByGenreId(
+        genreId: Int,
+        page: Int = 1,
+        language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+        region: String? = null,
+    ): Single<ListResponse<MovieDto>>
 }

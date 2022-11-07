@@ -5,10 +5,10 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 
 @Composable
-fun NavigationBackButton(navController: NavHostController? = null) {
+fun NavigationBackButton(navController: NavController? = null) {
     if (navController?.previousBackStackEntry != null) {
         run {
             IconButton(onClick = { navController.navigateUp() }) {
