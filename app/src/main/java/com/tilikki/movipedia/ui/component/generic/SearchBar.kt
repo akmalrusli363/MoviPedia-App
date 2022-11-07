@@ -5,11 +5,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -28,10 +26,20 @@ fun SearchView(
     modifier: Modifier = Modifier,
     placeholderText: String = "Search",
     onSearchTextChanged: (String) -> Unit = {},
-    onImeAction: (String) -> Unit = {}
+    onImeAction: (String) -> Unit = {},
+    onClearTextAction: (() -> Unit)? = null
 ) {
     var value by remember { mutableStateOf(searchText) }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val clearButtonIcon: @Composable (() -> Unit)? =
+        if (onClearTextAction != null && value.isNotBlank()) {
+            {
+                ClearSearchQueryButton {
+                    value = ""
+                    onClearTextAction()
+                }
+            }
+        } else null
     TextField(
         value = value,
         onValueChange = {
@@ -39,6 +47,7 @@ fun SearchView(
             onSearchTextChanged(it)
         },
         leadingIcon = { Icon(Icons.Filled.Search, null, tint = Color.Gray) },
+        trailingIcon = clearButtonIcon,
         modifier = modifier
             .padding(4.dp)
             .background(getCardBackgroundColor(), RoundedCornerShape(8.dp))
@@ -57,6 +66,17 @@ fun SearchView(
             onImeAction(value)
         }),
     )
+}
+
+@Composable
+private fun ClearSearchQueryButton(onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        Icon(
+            imageVector = Icons.Filled.Clear,
+            contentDescription = "Clear search",
+            tint = Color.Gray
+        )
+    }
 }
 
 @Preview

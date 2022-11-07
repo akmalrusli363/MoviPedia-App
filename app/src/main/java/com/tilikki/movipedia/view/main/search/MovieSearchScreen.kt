@@ -41,6 +41,7 @@ fun MovieSearchScreen(
         isSearching = viewModel.isSearching,
         navController = navController,
         onSearch = onSearch,
+        onClearSearch = { viewModel.isSearching = false },
         searchQuery = viewModel.searchQuery
     )
 }
@@ -52,6 +53,7 @@ fun MovieSearchContent(
     isSearching: Boolean,
     navController: NavController,
     onSearch: (String) -> Unit,
+    onClearSearch: () -> Unit = {},
     searchQuery: String = "",
 ) {
     Column() {
@@ -67,7 +69,8 @@ fun MovieSearchContent(
             onImeAction = onSearch,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(8.dp),
+            onClearTextAction = onClearSearch,
         )
         if (isSearching) {
             MovieList(
