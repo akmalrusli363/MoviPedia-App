@@ -14,9 +14,13 @@ fun MovieList(
     modifier: Modifier = Modifier,
     onMovieCardItemClick: (Int) -> Unit = {},
 ) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = modifier) {
-        items(movieList) { movie ->
-            MovieCard(movie = movie, onMovieCardClick = onMovieCardItemClick)
+    if (movieList.isEmpty()) {
+        MovieNotFoundScreen(null)
+    } else {
+        LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = modifier) {
+            items(movieList) { movie ->
+                MovieCard(movie = movie, onMovieCardClick = onMovieCardItemClick)
+            }
         }
     }
 }

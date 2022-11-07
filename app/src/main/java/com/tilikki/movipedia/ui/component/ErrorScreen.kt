@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.R
-import java.lang.Exception
 
 @Composable
 fun ErrorScreen(
@@ -37,7 +36,8 @@ fun ErrorScreen(
                 tint = Color.Gray,
                 modifier = Modifier
                     .padding(16.dp)
-                    .defaultMinSize(minWidth = 48.dp)
+                    .wrapContentSize()
+                    .defaultMinSize(minWidth = 64.dp, minHeight = 64.dp)
             )
             Text(text = errorMessage, modifier = Modifier.padding(vertical = 4.dp))
             error?.let { err ->

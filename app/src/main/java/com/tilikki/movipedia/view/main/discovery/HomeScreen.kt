@@ -14,7 +14,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.model.general.FetchState
+import com.tilikki.movipedia.ui.component.LoadingScreen
 import com.tilikki.movipedia.ui.component.MovieList
+import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.view.navigation.Screens
 
@@ -24,16 +27,21 @@ fun HomeScreen(
     viewModel: DiscoverMovieListViewModel = viewModel()
 ) {
     val movieList = viewModel.movieList
+    val fetchState = viewModel.fetchState
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getMovieList()
     }
 
-    HomeScreenContent(movieList = movieList, navController)
+    HomeScreenContent(movieList = movieList, navController, fetchState)
 }
 
 @Composable
-private fun HomeScreenContent(movieList: List<Movie>, navController: NavController) {
+private fun HomeScreenContent(
+    movieList: List<Movie>,
+    navController: NavController,
+    fetchState: FetchState = FetchState.defaultState()
+) {
     Column {
         Text(
             text = "Featured movies",
@@ -42,13 +50,19 @@ private fun HomeScreenContent(movieList: List<Movie>, navController: NavControll
                 .padding(16.dp)
                 .fillMaxWidth()
         )
-        MovieList(
-            movieList = movieList,
-            modifier = Modifier.padding(8.dp),
-            onMovieCardItemClick = { movieId ->
-                Screens.MovieDetail.navigateTo(navController, movieId)
-            }
-        )
+        if (fetchState.isLoading) {
+            LoadingScreen()
+        } else if (fetchState.failException != null) {
+            MovieNotFoundScreen(error = fetchState.failException)
+        } else {
+            MovieList(
+                movieList = movieList,
+                modifier = Modifier.padding(8.dp),
+                onMovieCardItemClick = { movieId ->
+                    Screens.MovieDetail.navigateTo(navController, movieId)
+                }
+            )
+        }
     }
 }
 
