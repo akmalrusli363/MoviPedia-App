@@ -51,6 +51,7 @@ interface MovieInterface {
     @GET("search/movie")
     fun searchForMovies(
         @Query("query") query: String,
+        @Query("page") page: Int = 1,
         @Query("language") language: String = Constants.DEFAULT_REQUEST_LANGUAGE
     ): Single<ListResponse<MovieDto>>
 

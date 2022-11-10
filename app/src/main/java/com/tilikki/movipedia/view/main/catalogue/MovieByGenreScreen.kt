@@ -1,25 +1,34 @@
 package com.tilikki.movipedia.view.main.catalogue
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Movie
-import com.tilikki.movipedia.model.general.FetchState
-import com.tilikki.movipedia.ui.component.MovieList
-import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
+import com.tilikki.movipedia.ui.component.LoadingScreen
+import com.tilikki.movipedia.ui.component.MovieFetchErrorScreen
+import com.tilikki.movipedia.ui.component.PagingMovieList
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
+import com.tilikki.movipedia.ui.util.throwInToast
+import com.tilikki.movipedia.util.asException
+import com.tilikki.movipedia.util.getErrors
+import com.tilikki.movipedia.util.rememberFlow
+import com.tilikki.movipedia.util.toPagingDataFlow
 import com.tilikki.movipedia.view.navigation.NavigationBackButton
 import com.tilikki.movipedia.view.navigation.Screens
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun MovieByGenre(
@@ -27,11 +36,8 @@ fun MovieByGenre(
     navController: NavController,
     viewModel: MovieByGenreViewModel = viewModel(factory = MovieByGenreViewModelFactory(genreId))
 ) {
-    val movieList = remember { viewModel.movieList }
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getMovieList()
-    }
-    MovieByCategoryContent(
+    val movieList = rememberFlow(viewModel.movieList)
+    MovieByCategoryScreen(
         category = "Genre",
         movieList = movieList,
         navController = navController,
@@ -39,11 +45,10 @@ fun MovieByGenre(
 }
 
 @Composable
-private fun MovieByCategoryContent(
+private fun MovieByCategoryScreen(
     category: String,
-    movieList: List<Movie>,
+    movieList: Flow<PagingData<Movie>>,
     navController: NavController,
-    fetchState: FetchState = FetchState.defaultState()
 ) {
     Scaffold(
         topBar = {
@@ -59,24 +64,50 @@ private fun MovieByCategoryContent(
                 .padding(it),
             color = MaterialTheme.colors.background
         ) {
-            Text(
-                text = category,
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
+            MovieByCategoryContent(
+                category = category,
+                movieList = movieList,
+                navController = navController
             )
-            if (movieList.isEmpty()) {
-                MovieNotFoundScreen(error = fetchState.failException)
-            } else {
-                MovieList(
-                    movieList = movieList,
-                    modifier = Modifier.padding(8.dp),
-                    onMovieCardItemClick = { movieId ->
-                        Screens.MovieDetail.navigateTo(navController, movieId)
-                    }
-                )
-            }
+        }
+    }
+}
+
+@Composable
+private fun MovieByCategoryContent(
+    category: String,
+    movieList: Flow<PagingData<Movie>>,
+    navController: NavController,
+) {
+    val lazyMovieList = movieList.collectAsLazyPagingItems()
+    val loadState = lazyMovieList.loadState
+    val isLoading = loadState.refresh is LoadState.Loading
+    val errorState = loadState.getErrors()
+
+    Column {
+        Text(
+            text = category,
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        )
+        if (isLoading) {
+            LoadingScreen()
+        } else if (errorState != null) {
+            throwInToast(LocalContext.current, errorState.error)
+            MovieFetchErrorScreen(
+                error = errorState.error.asException(),
+                onRetryAction = { lazyMovieList.retry() }
+            )
+        } else {
+            PagingMovieList(
+                lazyMovieList = movieList.collectAsLazyPagingItems(),
+                modifier = Modifier.padding(8.dp),
+                onMovieCardItemClick = { movieId ->
+                    Screens.MovieDetail.navigateTo(navController, movieId)
+                }
+            )
         }
     }
 }
@@ -92,6 +123,10 @@ private fun PreviewMovieByGenre() {
     )
 
     MoviPediaTheme {
-        MovieByCategoryContent("missingno", movieList, navController = rememberNavController())
+        MovieByCategoryContent(
+            category = "missingno",
+            movieList = movieList.toPagingDataFlow(),
+            navController = rememberNavController()
+        )
     }
 }

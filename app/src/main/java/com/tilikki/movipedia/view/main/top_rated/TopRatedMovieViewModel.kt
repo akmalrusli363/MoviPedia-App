@@ -1,16 +1,16 @@
 package com.tilikki.movipedia.view.main.top_rated
 
-import com.tilikki.movipedia.dto.ListResponse
-import com.tilikki.movipedia.dto.MovieDto
+import androidx.paging.PagingData
+import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.view.main.BaseMovieViewModel
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 class TopRatedMovieViewModel : BaseMovieViewModel() {
-    override fun fetchMovieList(
+    override fun fetchMovieListAsFlowable(
         page: Int,
         language: String,
         region: String
-    ): Single<ListResponse<MovieDto>> {
+    ): Flowable<PagingData<Movie>> {
         return movieRepository.getTopRatedMovieList()
     }
 }

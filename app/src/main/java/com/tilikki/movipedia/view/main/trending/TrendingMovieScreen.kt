@@ -8,18 +8,26 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Movie
-import com.tilikki.movipedia.model.general.FetchState
 import com.tilikki.movipedia.ui.component.LoadingScreen
-import com.tilikki.movipedia.ui.component.MovieList
-import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
+import com.tilikki.movipedia.ui.component.MovieFetchErrorScreen
+import com.tilikki.movipedia.ui.component.PagingMovieList
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
+import com.tilikki.movipedia.ui.util.throwInToast
+import com.tilikki.movipedia.util.asException
+import com.tilikki.movipedia.util.getErrors
+import com.tilikki.movipedia.util.toPagingDataFlow
 import com.tilikki.movipedia.view.navigation.Screens
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun TrendingMovieScreen(
@@ -27,19 +35,21 @@ fun TrendingMovieScreen(
     viewModel: TrendingMovieViewModel = viewModel()
 ) {
     val movieList = remember { viewModel.movieList }
-    val fetchState = viewModel.fetchState
     LaunchedEffect(key1 = Unit) {
-        viewModel.getMovieList()
+        viewModel.fetchMovieList()
     }
-    TrendingMovieContent(movieList = movieList, navController, fetchState)
+    TrendingMovieContent(movieList = movieList, navController)
 }
 
 @Composable
 private fun TrendingMovieContent(
-    movieList: List<Movie>,
+    movieList: Flow<PagingData<Movie>>,
     navController: NavController,
-    fetchState: FetchState = FetchState.defaultState()
 ) {
+    val lazyMovieList = movieList.collectAsLazyPagingItems()
+    val loadState = lazyMovieList.loadState
+    val isLoading = loadState.refresh is LoadState.Loading
+    val errorState = loadState.getErrors()
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -59,13 +69,17 @@ private fun TrendingMovieContent(
                     .padding(16.dp),
             )
         }
-        if (fetchState.isLoading) {
+        if (isLoading) {
             LoadingScreen()
-        } else if (fetchState.failException != null) {
-            MovieNotFoundScreen(error = fetchState.failException)
+        } else if (errorState != null) {
+            throwInToast(LocalContext.current, errorState.error)
+            MovieFetchErrorScreen(
+                error = errorState.error.asException(),
+                onRetryAction = { lazyMovieList.retry() }
+            )
         } else {
-            MovieList(
-                movieList = movieList,
+            PagingMovieList(
+                lazyMovieList = lazyMovieList,
                 modifier = Modifier.padding(8.dp),
                 onMovieCardItemClick = { movieId ->
                     Screens.MovieDetail.navigateTo(navController, movieId)
@@ -86,6 +100,6 @@ private fun PreviewTopRatedMovie() {
     )
 
     MoviPediaTheme {
-        TrendingMovieContent(movieList, navController = rememberNavController())
+        TrendingMovieContent(movieList.toPagingDataFlow(), navController = rememberNavController())
     }
 }

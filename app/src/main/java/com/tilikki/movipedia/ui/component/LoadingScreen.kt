@@ -18,13 +18,19 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            CircularProgressIndicator(modifier = Modifier.size(64.dp))
-            Text(text = "Loading", modifier = Modifier.padding(vertical = 4.dp))
-        }
+        LoadingBox()
+    }
+}
+
+@Composable
+fun LoadingBox(modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier.padding(8.dp),
+    ) {
+        CircularProgressIndicator(modifier = Modifier.size(64.dp))
+        Text(text = "Loading", modifier = Modifier.padding(vertical = 4.dp))
     }
 }
 
