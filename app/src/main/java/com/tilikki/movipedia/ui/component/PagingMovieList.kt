@@ -10,28 +10,42 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.helper.Constants
 import com.tilikki.movipedia.model.Movie
-import kotlinx.coroutines.flow.Flow
+import com.tilikki.movipedia.ui.util.throwInToast
+import com.tilikki.movipedia.util.asException
+import com.tilikki.movipedia.util.getErrors
 
 @Composable
-fun FlowableMovieList(
-    movieList: Flow<PagingData<Movie>>,
-    modifier: Modifier = Modifier,
+fun PagingMovieListScreen(
+    lazyMovieList: LazyPagingItems<Movie>,
     onMovieCardItemClick: (Int) -> Unit = {},
 ) {
-    PagingMovieList(
-        lazyMovieList = movieList.collectAsLazyPagingItems(),
-        modifier = modifier,
-        onMovieCardItemClick = onMovieCardItemClick
-    )
+    val loadState = lazyMovieList.loadState
+    val isLoading = loadState.refresh is LoadState.Loading
+    val errorState = loadState.getErrors()
+
+    if (isLoading) {
+        LoadingScreen()
+    } else if (errorState != null) {
+        throwInToast(LocalContext.current, errorState.error)
+        MovieFetchErrorScreen(
+            error = errorState.error.asException(),
+            onRetryAction = { lazyMovieList.retry() }
+        )
+    } else {
+        PagingMovieList(
+            lazyMovieList = lazyMovieList,
+            modifier = Modifier.padding(8.dp),
+            onMovieCardItemClick = onMovieCardItemClick
+        )
+    }
 }
 
 @Composable

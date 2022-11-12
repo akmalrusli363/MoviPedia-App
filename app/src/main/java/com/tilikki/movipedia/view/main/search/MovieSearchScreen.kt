@@ -10,26 +10,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.GenrePicker
-import com.tilikki.movipedia.ui.component.LoadingScreen
-import com.tilikki.movipedia.ui.component.MovieFetchErrorScreen
-import com.tilikki.movipedia.ui.component.PagingMovieList
+import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.component.generic.SearchView
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
-import com.tilikki.movipedia.ui.util.throwInToast
-import com.tilikki.movipedia.util.asException
-import com.tilikki.movipedia.util.getErrors
 import com.tilikki.movipedia.util.toPagingDataFlow
 import com.tilikki.movipedia.view.navigation.Screens
 import kotlinx.coroutines.flow.Flow
@@ -86,27 +79,12 @@ fun MovieSearchContent(
             onClearTextAction = onClearSearch,
         )
         if (isSearching) {
-            val lazyMovieList = movieList.collectAsLazyPagingItems()
-            val loadState = lazyMovieList.loadState
-            val isLoading = loadState.refresh is LoadState.Loading
-            val errorState = loadState.getErrors()
-            if (isLoading) {
-                LoadingScreen()
-            } else if (errorState != null) {
-                throwInToast(LocalContext.current, errorState.error)
-                MovieFetchErrorScreen(
-                    error = errorState.error.asException(),
-                    onRetryAction = { lazyMovieList.retry() }
-                )
-            } else {
-                PagingMovieList(
-                    lazyMovieList = lazyMovieList,
-                    modifier = Modifier.padding(8.dp),
-                    onMovieCardItemClick = { movieId ->
-                        Screens.MovieDetail.navigateTo(navController, movieId)
-                    }
-                )
-            }
+            PagingMovieListScreen(
+                lazyMovieList = movieList.collectAsLazyPagingItems(),
+                onMovieCardItemClick = { movieId ->
+                    Screens.MovieDetail.navigateTo(navController, movieId)
+                }
+            )
         } else {
             GenrePicker(
                 genres = genreList,

@@ -7,23 +7,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Movie
-import com.tilikki.movipedia.ui.component.LoadingScreen
-import com.tilikki.movipedia.ui.component.MovieFetchErrorScreen
-import com.tilikki.movipedia.ui.component.PagingMovieList
+import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
-import com.tilikki.movipedia.ui.util.throwInToast
-import com.tilikki.movipedia.util.asException
-import com.tilikki.movipedia.util.getErrors
 import com.tilikki.movipedia.util.toPagingDataFlow
 import com.tilikki.movipedia.view.navigation.Screens
 import kotlinx.coroutines.flow.Flow
@@ -42,10 +35,6 @@ private fun TrendingMovieContent(
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
 ) {
-    val lazyMovieList = movieList.collectAsLazyPagingItems()
-    val loadState = lazyMovieList.loadState
-    val isLoading = loadState.refresh is LoadState.Loading
-    val errorState = loadState.getErrors()
     Column {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -65,23 +54,12 @@ private fun TrendingMovieContent(
                     .padding(16.dp),
             )
         }
-        if (isLoading) {
-            LoadingScreen()
-        } else if (errorState != null) {
-            throwInToast(LocalContext.current, errorState.error)
-            MovieFetchErrorScreen(
-                error = errorState.error.asException(),
-                onRetryAction = { lazyMovieList.retry() }
-            )
-        } else {
-            PagingMovieList(
-                lazyMovieList = lazyMovieList,
-                modifier = Modifier.padding(8.dp),
-                onMovieCardItemClick = { movieId ->
-                    Screens.MovieDetail.navigateTo(navController, movieId)
-                }
-            )
-        }
+        PagingMovieListScreen(
+            lazyMovieList = movieList.collectAsLazyPagingItems(),
+            onMovieCardItemClick = { movieId ->
+                Screens.MovieDetail.navigateTo(navController, movieId)
+            }
+        )
     }
 }
 
