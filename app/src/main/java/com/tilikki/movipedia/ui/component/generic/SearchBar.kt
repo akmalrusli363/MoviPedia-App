@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.ui.component.generic
 
+import android.view.KeyEvent.ACTION_DOWN
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,6 +36,15 @@ fun SearchView(
 ) {
     var value by remember { mutableStateOf(searchText) }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val enterKeyAction = { kEvent: KeyEvent ->
+        if (kEvent.key == Key.Enter || kEvent.nativeKeyEvent.action == ACTION_DOWN) {
+            keyboardController?.hide()
+            onImeAction(value)
+            true
+        } else {
+            false
+        }
+    }
     val clearButtonIcon: @Composable (() -> Unit)? =
         if (onClearTextAction != null && value.isNotBlank()) {
             {
@@ -51,7 +65,8 @@ fun SearchView(
         modifier = modifier
             .padding(4.dp)
             .background(getCardBackgroundColor(), RoundedCornerShape(8.dp))
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .onKeyEvent(enterKeyAction),
         placeholder = { Text(placeholderText) },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
