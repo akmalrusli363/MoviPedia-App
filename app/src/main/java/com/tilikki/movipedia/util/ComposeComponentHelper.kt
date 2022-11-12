@@ -1,7 +1,6 @@
 package com.tilikki.movipedia.util
 
 import androidx.compose.runtime.Composable
-import org.w3c.dom.Text
 
 @Composable
 fun ConditionalComponent(obj: Any?, component: @Composable () -> Unit) {

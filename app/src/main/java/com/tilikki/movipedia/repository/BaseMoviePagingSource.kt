@@ -34,8 +34,8 @@ class BaseMoviePagingSource(
                 Constants.START_PAGE -> null
                 else -> position - 1
             },
-            nextKey = when (position) {
-                response.totalPages -> null
+            nextKey = when {
+                position >= response.totalPages -> null
                 else -> position + 1
             }
         )

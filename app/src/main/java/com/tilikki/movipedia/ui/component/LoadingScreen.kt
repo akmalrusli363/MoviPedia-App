@@ -30,7 +30,6 @@ fun LoadingBox(modifier: Modifier = Modifier) {
         modifier = modifier.padding(8.dp),
     ) {
         CircularProgressIndicator(modifier = Modifier.size(64.dp))
-        Text(text = "Loading", modifier = Modifier.padding(vertical = 4.dp))
     }
 }
 
@@ -58,13 +57,19 @@ fun NavigableLoadingScreen(navHostController: NavHostController?) {
 
 @Preview
 @Composable
-fun PreviewLoadingScreen() {
+private fun PreviewLoadingBox() {
+    LoadingBox(Modifier.padding(8.dp))
+}
+
+@Preview
+@Composable
+private fun PreviewLoadingScreen() {
     LoadingScreen()
 }
 
 @Preview
 @Composable
-fun PreviewNavLoadingScreen() {
+private fun PreviewNavLoadingScreen() {
     Scaffold(
         topBar = {
             TopAppBar(

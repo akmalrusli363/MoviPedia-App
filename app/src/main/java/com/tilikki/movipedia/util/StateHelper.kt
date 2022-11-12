@@ -27,13 +27,12 @@ fun <T : Any> LazyPagingItems<T>.isEmpty(): Boolean {
 }
 
 fun CombinedLoadStates.getErrors(): LoadState.Error? {
-    val loadState = this
-    return loadState.source.append as? LoadState.Error
-        ?: loadState.source.prepend as? LoadState.Error
-        ?: loadState.source.refresh as? LoadState.Error
-        ?: loadState.append as? LoadState.Error
-        ?: loadState.prepend as? LoadState.Error
-        ?: loadState.refresh as? LoadState.Error
+    return this.source.append as? LoadState.Error
+        ?: this.source.prepend as? LoadState.Error
+        ?: this.source.refresh as? LoadState.Error
+        ?: this.append as? LoadState.Error
+        ?: this.prepend as? LoadState.Error
+        ?: this.refresh as? LoadState.Error
 }
 
 @Composable
