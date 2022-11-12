@@ -16,7 +16,7 @@ import kotlinx.coroutines.reactive.asFlow
 abstract class BaseMovieViewModel : BaseDisposableViewModel() {
     protected val movieRepository: MovieRxRepository = MovieRxRepositoryImpl()
 
-    val movieList: Flow<PagingData<Movie>> = fetchMovieList()
+    val movieList: Flow<PagingData<Movie>> by lazy { fetchMovieList() }
 
     abstract fun fetchMovieListAsFlowable(
         page: Int = 1,
