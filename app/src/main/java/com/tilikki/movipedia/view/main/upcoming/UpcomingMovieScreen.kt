@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,9 +35,6 @@ fun UpcomingMovieScreen(
     viewModel: UpcomingMovieViewModel = viewModel()
 ) {
     val movieList = rememberFlow(viewModel.movieList)
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchMovieList()
-    }
     UpcomingMovieContent(movieList = movieList, navController)
 }
 

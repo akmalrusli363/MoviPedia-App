@@ -16,8 +16,4 @@ class TrendingMovieViewModel : BaseMovieViewModel() {
             timeRangeType = TimeRangeType.WEEK
         )
     }
-
-    override fun onCleared() {
-        super.onCleared()
-    }
 }
