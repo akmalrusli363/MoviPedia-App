@@ -8,10 +8,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava2.cachedIn
+import com.tilikki.movipedia.db.MovieDatabase
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
-import com.tilikki.movipedia.repository.MovieRepository
-import com.tilikki.movipedia.repository.MovieRepositoryImpl
+import com.tilikki.movipedia.repository.MoviePropertiesRepository
+import com.tilikki.movipedia.repository.MoviePropertiesRepositoryImpl
 import com.tilikki.movipedia.repository.MovieRxRepository
 import com.tilikki.movipedia.repository.MovieRxRepositoryImpl
 import com.tilikki.movipedia.util.swapList
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
-class MovieSearchViewModel : BaseDisposableViewModel() {
+class MovieSearchViewModel(movieDatabase: MovieDatabase) : BaseDisposableViewModel() {
 
     var isSearching by mutableStateOf(false)
     var searchQuery = MutableStateFlow("")
@@ -37,8 +38,8 @@ class MovieSearchViewModel : BaseDisposableViewModel() {
         fetchMovieList(query)
     }
 
-    private val movieRepository: MovieRepository by lazy {
-        MovieRepositoryImpl()
+    private val moviePropertiesRepository: MoviePropertiesRepository by lazy {
+        MoviePropertiesRepositoryImpl(movieDatabase)
     }
     private val movieRxRepository: MovieRxRepository by lazy {
         MovieRxRepositoryImpl()
@@ -63,13 +64,12 @@ class MovieSearchViewModel : BaseDisposableViewModel() {
     }
 
     fun getGenreList() {
-        val disposableFetchGenreList = movieRepository.getGenreList()
+        val disposableFetchGenreList = moviePropertiesRepository.getGenreList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d("MvFetcher", it.toString())
-                val domainGenreList = it.toDomainGenreList()
-                genreList.swapList(domainGenreList)
+                genreList.swapList(it)
             }, { err ->
                 Log.e("MvFetcher", err.message, err)
             })

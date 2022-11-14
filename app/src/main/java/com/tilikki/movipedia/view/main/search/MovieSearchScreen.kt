@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.tilikki.movipedia.db.MovieDatabase
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.GenrePicker
@@ -30,7 +32,11 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun MovieSearchScreen(
     navController: NavController,
-    viewModel: MovieSearchViewModel = viewModel()
+    viewModel: MovieSearchViewModel = viewModel(
+        factory = MovieSearchViewModelFactory(
+            MovieDatabase.getInstance(LocalContext.current)
+        )
+    )
 ) {
     val movieList = remember { viewModel.movieList }
     val genreList = remember { viewModel.genreList }

@@ -1,19 +1,16 @@
 package com.tilikki.movipedia.repository
 
-import com.tilikki.movipedia.dto.GenreListDto
 import com.tilikki.movipedia.dto.ListResponse
 import com.tilikki.movipedia.dto.MovieDto
 import com.tilikki.movipedia.model.MovieDetail
 import com.tilikki.movipedia.model.general.TimeRangeType
 import com.tilikki.movipedia.network.RetrofitInstance
 import com.tilikki.movipedia.repository.endpoint.MovieInterface
-import com.tilikki.movipedia.repository.endpoint.MovieParameterInterface
 import io.reactivex.Single
 
 class MovieRepositoryImpl : MovieRepository {
     private val retrofit = RetrofitInstance.getRetrofitInstance()
     private val movieInterface = retrofit.create(MovieInterface::class.java)
-    private val movieParameterInterface = retrofit.create(MovieParameterInterface::class.java)
 
     override fun getMovieList(
         page: Int,
@@ -60,10 +57,6 @@ class MovieRepositoryImpl : MovieRepository {
         return movieInterface.getMovieDetail(id).map {
             it.toDomainMovieDetail()
         }
-    }
-
-    override fun getGenreList(): Single<GenreListDto> {
-        return movieParameterInterface.getGenreList()
     }
 
     override fun getMovieListByGenreId(

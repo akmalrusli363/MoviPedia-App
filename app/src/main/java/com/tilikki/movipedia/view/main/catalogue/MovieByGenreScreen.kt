@@ -2,18 +2,20 @@ package com.tilikki.movipedia.view.main.catalogue
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.tilikki.movipedia.db.MovieDatabase
 import com.tilikki.movipedia.model.Movie
 import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
@@ -27,11 +29,21 @@ import kotlinx.coroutines.flow.Flow
 fun MovieByGenre(
     genreId: Int,
     navController: NavController,
-    viewModel: MovieByGenreViewModel = viewModel(factory = MovieByGenreViewModelFactory(genreId))
+    viewModel: MovieByGenreViewModel = viewModel(
+        factory = MovieByGenreViewModelFactory(
+            genreId = genreId,
+            database = MovieDatabase.getInstance(LocalContext.current)
+        )
+    )
 ) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchGenreNameFromDb()
+    }
     val movieList = rememberFlow(viewModel.movieList)
+    val genreName = rememberFlow(viewModel.genreName).collectAsState(initial = "").value
+    val categoryLabeling = "Genre" + if (genreName.isNotBlank()) " - $genreName" else ""
     MovieByCategoryScreen(
-        category = "Genre",
+        category = categoryLabeling,
         movieList = movieList,
         navController = navController,
     )
@@ -58,7 +70,6 @@ private fun MovieByCategoryScreen(
             color = MaterialTheme.colors.background
         ) {
             MovieByCategoryContent(
-                category = category,
                 movieList = movieList,
                 navController = navController
             )
@@ -68,18 +79,10 @@ private fun MovieByCategoryScreen(
 
 @Composable
 private fun MovieByCategoryContent(
-    category: String,
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
 ) {
     Column {
-        Text(
-            text = category,
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        )
         PagingMovieListScreen(
             lazyMovieList = movieList.collectAsLazyPagingItems(),
             onMovieCardItemClick = { movieId ->
@@ -100,7 +103,7 @@ private fun PreviewMovieByGenre() {
     )
 
     MoviPediaTheme {
-        MovieByCategoryContent(
+        MovieByCategoryScreen(
             category = "missingno",
             movieList = movieList.toPagingDataFlow(),
             navController = rememberNavController()

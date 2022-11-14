@@ -1,9 +1,6 @@
 package com.tilikki.movipedia.ui.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -24,7 +21,11 @@ fun GenrePicker(
     shape: Shape = RoundedCornerShape(8.dp),
     onGenreCardItemClicked: (Int) -> Unit = { }
 ) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = modifier) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
         items(genres) { genre ->
             GenreChip(
                 genre = genre,
