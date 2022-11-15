@@ -35,6 +35,7 @@ interface MovieRepository {
 
     fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>>
     fun getMovieDetail(id: Int): Single<MovieDetail>
+    fun getMovieDetailWithAdditionalFields(id: Int): Single<MovieDetail>
 
     fun getMovieListByGenreId(
         genreId: Int,

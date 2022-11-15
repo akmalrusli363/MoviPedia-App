@@ -3,6 +3,7 @@ package com.tilikki.movipedia.repository.endpoint
 import com.tilikki.movipedia.dto.ListResponse
 import com.tilikki.movipedia.dto.MovieDetailDto
 import com.tilikki.movipedia.dto.MovieDto
+import com.tilikki.movipedia.helper.AdditionalResponseField
 import com.tilikki.movipedia.helper.Constants
 import com.tilikki.movipedia.model.general.TimeRangeType
 import io.reactivex.Single
@@ -64,5 +65,16 @@ interface MovieInterface {
     fun getMovieDetail(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+    ): Single<MovieDetailDto>
+
+    @GET("movie/{movie_id}")
+    fun getMovieDetailExtra(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+        @Query("append_to_response", encoded = true)
+        additionalFields: String = AdditionalResponseField(
+            "videos",
+            "keywords"
+        )(),
     ): Single<MovieDetailDto>
 }

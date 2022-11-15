@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.tilikki.movipedia.model.Genre
+import com.tilikki.movipedia.model.Keyword
 import com.tilikki.movipedia.model.MovieDetail
 import com.tilikki.movipedia.model.ProductionCompany
 import com.tilikki.movipedia.model.general.Country
@@ -86,7 +87,10 @@ private fun backdropToScreenConstraint(): ConstraintSet {
 }
 
 @Composable
-private fun MovieDetailContent(movie: MovieDetail, navController: NavHostController? = null) {
+private fun MovieDetailContent(
+    movie: MovieDetail,
+    navController: NavHostController? = null
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -231,6 +235,17 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
     ) { productionCompanies ->
         ProductionCompanyChips(productionCompanies = productionCompanies)
     }
+    ConditionalComponent(obj = movie.keywords, movie.keywords.isNotEmpty()) {
+        FieldWithChip(
+            title = "Keywords",
+            list = movie.keywords,
+            modifier = Modifier
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) { keywords ->
+            KeywordChips(keywords = keywords)
+        }
+    }
+
     ConditionalComponent(string = movie.overview) {
         Card(
             backgroundColor = getCardBackgroundColor(),
@@ -274,7 +289,49 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
 
 @Preview
 @Composable
-private fun PreviewDetailScreen() {
+private fun PreviewDetailScreenComplete() {
+    MoviPediaTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            MovieDetailContent(
+                MovieDetail(
+                    id = 1,
+                    title = "title",
+                    originalTitle = "judul",
+                    releaseDate = "22-09-2020",
+                    genres = listOf(
+                        Genre(1, "comedy"),
+                        Genre(2, "romance")
+                    ),
+                    productionCompanies = listOf(
+                        ProductionCompany(1, "union", "sp", "")
+                    ),
+                    productionCountries = listOf(
+                        Country("USA", "us")
+                    ),
+                    tagline = "film dunia",
+                    language = "en",
+                    status = "released",
+                    overview = generateLoremIpsumString(100),
+                    backdropPath = "/d6MhreFdMHONqX3iZlJGCF8UkIt.jpg",
+                    posterPath = "/3zXceNTtyj5FLjwQXuPvLYK5YYL.jpg",
+                    keywords = listOf(
+                        Keyword(123, "hello I am a fish"),
+                        Keyword(143, "stairway to the heaven"),
+                        Keyword(173, "dealing with crazy neighbourhood"),
+                        Keyword(209, "spiderman"),
+                        Keyword(233, "spiderman feat tom holland"),
+                        Keyword(333, "underworld not the nether"),
+                        Keyword(553, "hell on the highway"),
+                    )
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDetail() {
     MoviPediaTheme {
         Surface(color = MaterialTheme.colors.background) {
             MovieDetailContent(
@@ -311,7 +368,7 @@ private fun PreviewDetailScreenSimpleData() {
     MoviPediaTheme {
         Surface(color = MaterialTheme.colors.background) {
             MovieDetailContent(
-                MovieDetail(
+                movie = MovieDetail(
                     id = 1,
                     title = "title",
                     originalTitle = "title",

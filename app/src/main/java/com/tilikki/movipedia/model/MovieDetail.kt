@@ -21,6 +21,8 @@ data class MovieDetail(
     val productionCountries: List<Country> = listOf(),
     val voteCount: Int = 0,
     val voteAverage: Double = 0.0,
+    val videos: List<Video> = listOf(),
+    val keywords: List<Keyword> = listOf(),
 ) {
     fun generatePosterPath(): String {
         return AppConfigRepository.baseUrl + AppConfigRepository.posterSize + posterPath

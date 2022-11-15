@@ -22,7 +22,7 @@ class MovieDetailViewModel : BaseDisposableViewModel() {
         _movieId.postValue(movieId)
         isLoading = true
         val movieRepository: MovieRepository = MovieRepositoryImpl()
-        val disposableFetchMovieDetail = movieRepository.getMovieDetail(movieId)
+        val disposableFetchMovieDetail = movieRepository.getMovieDetailWithAdditionalFields(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movie ->

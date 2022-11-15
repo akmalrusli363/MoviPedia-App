@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateParser {
-    const val ISO_DATE_TIME_INSTANT: String = "yyyy-MM-dd HH:mm:ss.SSSZ"
+    const val ISO_DATE_TIME_INSTANT: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
     fun convertDateFormat(
         inputDate: String,

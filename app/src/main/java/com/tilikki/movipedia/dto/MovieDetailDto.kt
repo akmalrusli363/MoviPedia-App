@@ -22,6 +22,8 @@ data class MovieDetailDto(
     @SerializedName("release_date") val releaseDate: String?,
     @SerializedName("vote_average") val voteAverage: Double,
     @SerializedName("vote_count") val voteCount: Int,
+    @SerializedName("videos") val videos: MovieParameterDto<VideoDto>?,
+    @SerializedName("keywords") val keywords: KeywordListDto?,
 ) {
     fun toDomainMovieDetail(): MovieDetail {
         return MovieDetail(
@@ -41,6 +43,8 @@ data class MovieDetailDto(
             productionCountries = productionCountries.map(CountryDto::toDomainCountry),
             voteCount = voteCount,
             voteAverage = voteAverage,
+            videos = videos?.results?.map(VideoDto::toDomainVideo) ?: listOf(),
+            keywords = keywords?.toDomainKeywordList() ?: listOf(),
         )
     }
 }

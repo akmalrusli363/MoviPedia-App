@@ -59,6 +59,12 @@ class MovieRepositoryImpl : MovieRepository {
         }
     }
 
+    override fun getMovieDetailWithAdditionalFields(id: Int): Single<MovieDetail> {
+        return movieInterface.getMovieDetailExtra(id).map {
+            it.toDomainMovieDetail()
+        }
+    }
+
     override fun getMovieListByGenreId(
         genreId: Int,
         page: Int,

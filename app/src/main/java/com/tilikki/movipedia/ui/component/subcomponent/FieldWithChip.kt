@@ -8,7 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tilikki.movipedia.model.general.Country
 
 /**
  * Field with chip is a composable element for field label with chips (or other elements) placed below label.
@@ -41,5 +43,25 @@ fun <T> FieldWithChip(
             }
         }
         chips(list)
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewCountryChip() {
+    val countriesList = listOf<Country>(
+        Country("Australia", "au"),
+        Country("India", "in"),
+        Country("Japan", "jp"),
+        Country("Russia", "ru"),
+        Country("Zimbabwe", "zw"),
+    )
+    FieldWithChip(
+        title = "Country List",
+        list = countriesList,
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+    ) { countries ->
+        CountryChips(countries = countries)
     }
 }

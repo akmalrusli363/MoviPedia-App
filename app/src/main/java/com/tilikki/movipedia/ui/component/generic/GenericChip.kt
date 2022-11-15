@@ -29,7 +29,7 @@ fun GenericChip(
     textStyle: TextStyle = MaterialTheme.typography.caption,
 ) {
     val padModifier = modifier
-        .padding(horizontal = 4.dp)
+        .padding(4.dp)
         .clip(shape)
         .runIfNotNull(onClickAction) { onClick ->
             return@runIfNotNull this.clickable { onClick() }
