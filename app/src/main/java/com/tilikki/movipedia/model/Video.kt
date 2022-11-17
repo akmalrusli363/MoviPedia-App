@@ -1,6 +1,5 @@
 package com.tilikki.movipedia.model
 
-import android.net.Uri
 import com.google.gson.annotations.SerializedName
 
 data class Video(
@@ -13,13 +12,13 @@ data class Video(
     @SerializedName("size") val resolution: Int,
     @SerializedName("type") val type: VideoType,
     @SerializedName("official") val official: Boolean,
-    @SerializedName("published_at") val published_at: String,
+    @SerializedName("published_at") val publishedDate: String,
 ) {
     fun getVideoUrl(): String {
-        return site
+        return VideoProvider.getVideoProvider(site).getVideoUrl(key)
     }
 
-    fun getVideoEncodedUrl(): Uri {
-        return Uri.parse(getVideoUrl())
+    fun getThumbnailUrl(): String {
+        return VideoProvider.getVideoProvider(site).getVideoThumbnailUrl(key)
     }
 }

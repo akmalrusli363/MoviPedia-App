@@ -34,7 +34,7 @@ data class VideoDto(
             resolution = resolution,
             type = VideoType.getVideoType(type),
             official = official,
-            published_at = convertedPublishedDate,
+            publishedDate = convertedPublishedDate,
         )
     }
 }

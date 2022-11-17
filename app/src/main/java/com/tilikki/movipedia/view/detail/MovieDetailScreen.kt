@@ -26,13 +26,11 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.tilikki.movipedia.model.Genre
-import com.tilikki.movipedia.model.Keyword
-import com.tilikki.movipedia.model.MovieDetail
-import com.tilikki.movipedia.model.ProductionCompany
+import com.tilikki.movipedia.model.*
 import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
 import com.tilikki.movipedia.ui.component.NavigableLoadingScreen
+import com.tilikki.movipedia.ui.component.VideoList
 import com.tilikki.movipedia.ui.component.subcomponent.*
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.ui.theme.getCardBackgroundColor
@@ -274,6 +272,21 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
         }
     }
 
+    ConditionalComponent(obj = movie.keywords, movie.keywords.isNotEmpty()) {
+        Column(modifier = Modifier.padding(vertical = 4.dp)) {
+            val sortedVideoList = movie.videos.partition { video ->
+                video.type == VideoType.TEASER || video.type == VideoType.TRAILER
+            }.toList().flatten()
+            Text(
+                text = "Videos",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(horizontal = 4.dp),
+                fontWeight = FontWeight.Bold,
+            )
+            VideoList(videos = sortedVideoList)
+        }
+    }
+
     Card(
         backgroundColor = getCardBackgroundColor(),
         shape = RoundedCornerShape(8.dp),
@@ -322,6 +335,44 @@ private fun PreviewDetailScreenComplete() {
                         Keyword(233, "spiderman feat tom holland"),
                         Keyword(333, "underworld not the nether"),
                         Keyword(553, "hell on the highway"),
+                    ),
+                    videos = listOf(
+                        Video(
+                            id = "s1234567880",
+                            name = "Wakanda Wakanda Wakanda",
+                            type = VideoType.TEASER,
+                            language = "",
+                            country = "",
+                            key = "RlOB3UALvrQ",
+                            site = "YouTube",
+                            resolution = 1080,
+                            official = true,
+                            publishedDate = "2022-10-06T13:00:01.000Z"
+                        ),
+                        Video(
+                            id = "s1234567890",
+                            name = "Wakanda - Teaser Video - even longer extended",
+                            type = VideoType.TEASER,
+                            language = "",
+                            country = "",
+                            key = "RlOB3UALvrQ",
+                            site = "YouTube",
+                            resolution = 1080,
+                            official = true,
+                            publishedDate = "2022-10-03T13:00:01.000Z"
+                        ),
+                        Video(
+                            id = "s1234567899",
+                            name = "Wakanda blooper: nippon paint",
+                            type = VideoType.BLOOPERS,
+                            language = "",
+                            country = "",
+                            key = "RlOB3UALvrQ",
+                            site = "YouTube",
+                            resolution = 1080,
+                            official = true,
+                            publishedDate = "2022-10-13T13:00:01.000Z"
+                        ),
                     )
                 )
             )
@@ -376,6 +427,64 @@ private fun PreviewDetailScreenSimpleData() {
                     genres = listOf(
                         Genre(13, "horror")
                     ),
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewDetailScreenSimpleDataWithTeasers() {
+    MoviPediaTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            MovieDetailContent(
+                movie = MovieDetail(
+                    id = 1,
+                    title = "title",
+                    originalTitle = "title",
+                    releaseDate = "11-12-2014",
+                    genres = listOf(
+                        Genre(13, "horror")
+                    ),
+                    videos = listOf(
+                        Video(
+                            id = "s1234567880",
+                            name = "Wakanda Wakanda Wakanda",
+                            type = VideoType.TEASER,
+                            language = "",
+                            country = "",
+                            key = "RlOB3UALvrQ",
+                            site = "YouTube",
+                            resolution = 1080,
+                            official = true,
+                            publishedDate = "2022-10-06T13:00:01.000Z"
+                        ),
+                        Video(
+                            id = "s1234567890",
+                            name = "Wakanda - Teaser Video - even longer extended",
+                            type = VideoType.TEASER,
+                            language = "",
+                            country = "",
+                            key = "RlOB3UALvrQ",
+                            site = "YouTube",
+                            resolution = 1080,
+                            official = true,
+                            publishedDate = "2022-10-03T13:00:01.000Z"
+                        ),
+                        Video(
+                            id = "s1234567899",
+                            name = "Wakanda blooper: nippon paint",
+                            type = VideoType.BLOOPERS,
+                            language = "",
+                            country = "",
+                            key = "RlOB3UALvrQ",
+                            site = "YouTube",
+                            resolution = 1080,
+                            official = true,
+                            publishedDate = "2022-10-13T13:00:01.000Z"
+                        ),
+                    )
                 )
             )
         }

@@ -3,11 +3,20 @@ package com.tilikki.movipedia.model
 private const val PLACEHOLDER_SYMBOL = "[<%>]"
 private const val NULL_URL_PATH = "about:blank"
 
-enum class VideoProvider(val site: String, val url: String, val thumbnailUrl: String) {
+enum class VideoProvider(
+    val site: String,
+    private val url: String,
+    private val thumbnailUrl: String,
+) {
     YOUTUBE(
         "YouTube",
         "https://youtu.be/$PLACEHOLDER_SYMBOL",
-        "https://i.ytimg.com/vi/$PLACEHOLDER_SYMBOL/maxresdefault.jpg"
+        "https://i.ytimg.com/vi/$PLACEHOLDER_SYMBOL/mqdefault.jpg"
+    ),
+    VIMEO(
+        "Vimeo",
+        "https://vimeo.com/$PLACEHOLDER_SYMBOL",
+        "https://vumbnail.com/$PLACEHOLDER_SYMBOL.jpg"
     ),
     UNKNOWN("unknown", NULL_URL_PATH, NULL_URL_PATH);
 
