@@ -93,6 +93,7 @@ fun <T> DropDownMenu(
                     expanded = expanded
                 )
             },
+            modifier = modifier,
             colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
         ExposedDropdownMenu(

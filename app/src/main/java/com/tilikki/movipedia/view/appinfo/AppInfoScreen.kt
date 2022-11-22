@@ -117,49 +117,49 @@ private fun AppInfoContent(
                     }
                 }
             }
-            Row {
+            Column(modifier = Modifier.padding(vertical = 8.dp)) {
                 Text("Movie listing region", modifier = Modifier.padding(horizontal = 8.dp))
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-            ) {
-                DropDownMenu(
-                    label = "Region",
-                    modifier = Modifier.fillMaxWidth(),
-                    listData = configData.countryList,
-                    defaultValue = configData.defaultCountry,
-                    displayText = { it.name },
-                    onItemMenuChanged = { onChangeConfigDataAction.onChangeTmdbRegion(it) }
-                ) { country ->
-                    Text(text = "${country.getCountryFlagEmoji()} ${country.name}")
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ) {
+                    DropDownMenu(
+                        label = "Region",
+                        modifier = Modifier.fillMaxWidth(),
+                        listData = configData.countryList,
+                        defaultValue = configData.defaultCountry,
+                        displayText = { it.name },
+                        onItemMenuChanged = { onChangeConfigDataAction.onChangeTmdbRegion(it) }
+                    ) { country ->
+                        Text(text = "${country.getCountryFlagEmoji()} ${country.name}")
+                    }
                 }
             }
-            Row {
+            Column(modifier = Modifier.padding(vertical = 8.dp)) {
                 Text("Language", modifier = Modifier.padding(horizontal = 8.dp))
-            }
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-            ) {
-                DropDownMenu(
-                    label = "Language",
-                    modifier = Modifier.fillMaxWidth(),
-                    listData = configData.languageList,
-                    defaultValue = configData.defaultLanguage,
-                    displayText = { it.name },
-                    compareValue = { source, defaultValue ->
-                        source.languageCode == defaultValue.languageCode
-                    },
-                    onItemMenuChanged = { onChangeConfigDataAction.onChangeTmdbLanguage(it) }
-                ) { language ->
-                    Text(text = language.name)
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                ) {
+                    DropDownMenu(
+                        label = "Language",
+                        modifier = Modifier.fillMaxWidth(),
+                        listData = configData.languageList,
+                        defaultValue = configData.defaultLanguage,
+                        displayText = { it.name },
+                        compareValue = { source, defaultValue ->
+                            source.languageCode == defaultValue.languageCode
+                        },
+                        onItemMenuChanged = { onChangeConfigDataAction.onChangeTmdbLanguage(it) }
+                    ) { language ->
+                        Text(text = language.name)
+                    }
                 }
             }
         }

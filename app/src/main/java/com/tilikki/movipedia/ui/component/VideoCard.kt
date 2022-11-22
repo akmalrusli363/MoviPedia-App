@@ -16,15 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.tilikki.movipedia.R
 import com.tilikki.movipedia.model.Video
 import com.tilikki.movipedia.model.VideoType
 import com.tilikki.movipedia.ui.theme.getCardBackgroundColor
@@ -53,7 +53,7 @@ fun VideoCard(
             ) {
                 AsyncImage(
                     model = video.getThumbnailUrl(),
-                    placeholder = painterResource(id = R.drawable.ic_baseline_local_movies_24),
+                    placeholder = ColorPainter(Color.Gray),
                     contentDescription = video.name,
                     modifier = Modifier
                         .wrapContentHeight()
