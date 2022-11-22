@@ -9,6 +9,7 @@ sealed class Screens(val route: String) {
     object UpcomingMovies : Screens("upcoming_movies")
     object TopRatedMovies : Screens("top_rated_movies")
     object SearchMovies : Screens("search_movies")
+    object AppSettings : Screens("app_settings")
 
     object MovieListByGenre : Screens("movie_list/genre/{genre_id}") {
         const val GENRE_ID = "genre_id"

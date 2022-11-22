@@ -2,19 +2,19 @@ package com.tilikki.movipedia.view.main
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.tilikki.movipedia.MovipediaApp
 import com.tilikki.movipedia.dto.TmdbConfigDto
 import com.tilikki.movipedia.repository.AppConfigRepository
 import com.tilikki.movipedia.repository.AppConfigRepositoryImpl
+import com.tilikki.movipedia.view.BaseDisposableViewModel
 import io.reactivex.schedulers.Schedulers
 
-class AppInitializationViewModel: ViewModel() {
+class AppInitializationViewModel : BaseDisposableViewModel() {
     private val repository: AppConfigRepository = AppConfigRepositoryImpl(MovipediaApp.appContext!!)
 
     fun getConfiguration() {
-        repository.getAppConfig()
+        val disposable = repository.getAppConfig()
             .subscribeOn(Schedulers.io())
             .subscribe({ conf ->
                 Log.d("Configg", conf.toString())
@@ -22,6 +22,7 @@ class AppInitializationViewModel: ViewModel() {
             }, { err ->
                 Log.e("Configg", err.message, err)
             })
+        compositeDisposable.addAll(disposable)
     }
 
     private fun passToSharedPreferences(config: TmdbConfigDto) {

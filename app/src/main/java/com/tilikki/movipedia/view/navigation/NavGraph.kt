@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.tilikki.movipedia.view.appinfo.AppInfoScreen
 import com.tilikki.movipedia.view.detail.MovieDetailScreen
 import com.tilikki.movipedia.view.main.catalogue.MovieByGenre
 import com.tilikki.movipedia.view.main.discovery.HomeScreen
@@ -36,6 +37,9 @@ fun NavGraph(navController: NavHostController) {
             val genreId = backStackEntry.arguments?.getInt(Screens.MovieListByGenre.GENRE_ID)
                 ?: Integer.MIN_VALUE
             MovieByGenre(genreId = genreId, navController = navController)
+        }
+        composable(route = Screens.AppSettings.route) {
+            AppInfoScreen(navController = navController)
         }
     }
 }
