@@ -6,13 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import com.tilikki.movipedia.model.MovieDetail
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.repository.MovieRepository
 import com.tilikki.movipedia.repository.MovieRepositoryImpl
 import com.tilikki.movipedia.view.BaseDisposableViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class MovieDetailViewModel : BaseDisposableViewModel() {
+class MovieDetailViewModel(val sharedPreferences: AppSharedPreferences) :
+    BaseDisposableViewModel() {
     var movieDetail: MovieDetail? by mutableStateOf(null)
     var isLoading: Boolean by mutableStateOf(false)
 
@@ -22,7 +24,9 @@ class MovieDetailViewModel : BaseDisposableViewModel() {
         _movieId.postValue(movieId)
         isLoading = true
         val movieRepository: MovieRepository = MovieRepositoryImpl()
-        val disposableFetchMovieDetail = movieRepository.getMovieDetailWithAdditionalFields(movieId)
+        val language = sharedPreferences.getTmdbLanguage()
+        val disposableFetchMovieDetail = movieRepository
+            .getMovieDetailWithAdditionalFields(movieId, language)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movie ->

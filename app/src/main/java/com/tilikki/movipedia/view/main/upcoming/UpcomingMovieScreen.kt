@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.view.main.upcoming
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.util.rememberFlow
@@ -25,7 +28,10 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun UpcomingMovieScreen(
     navController: NavController,
-    viewModel: UpcomingMovieViewModel = viewModel()
+    context: Context = LocalContext.current,
+    viewModel: UpcomingMovieViewModel = viewModel {
+        UpcomingMovieViewModel(AppSharedPreferences(context))
+    }
 ) {
     val movieList = rememberFlow(viewModel.movieList)
     UpcomingMovieContent(movieList = movieList, navController)

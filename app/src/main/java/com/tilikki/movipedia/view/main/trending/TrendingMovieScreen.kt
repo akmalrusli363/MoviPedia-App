@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.view.main.trending
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -7,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.util.toPagingDataFlow
@@ -24,7 +27,10 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun TrendingMovieScreen(
     navController: NavController,
-    viewModel: TrendingMovieViewModel = viewModel()
+    context: Context = LocalContext.current,
+    viewModel: TrendingMovieViewModel = viewModel {
+        TrendingMovieViewModel(AppSharedPreferences(context))
+    }
 ) {
     val movieList = remember { viewModel.movieList }
     TrendingMovieContent(movieList = movieList, navController)

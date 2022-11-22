@@ -49,18 +49,25 @@ class MovieRepositoryImpl : MovieRepository {
         return movieInterface.getTrendingMovieList(timeRangeType, page, language, region)
     }
 
-    override fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>> {
+    override fun searchForMovie(
+        searchQuery: String,
+        language: String,
+        region: String?
+    ): Single<ListResponse<MovieDto>> {
         return movieInterface.searchForMovies(searchQuery)
     }
 
-    override fun getMovieDetail(id: Int): Single<MovieDetail> {
-        return movieInterface.getMovieDetail(id).map {
+    override fun getMovieDetail(id: Int, language: String): Single<MovieDetail> {
+        return movieInterface.getMovieDetail(id, language).map {
             it.toDomainMovieDetail()
         }
     }
 
-    override fun getMovieDetailWithAdditionalFields(id: Int): Single<MovieDetail> {
-        return movieInterface.getMovieDetailExtra(id).map {
+    override fun getMovieDetailWithAdditionalFields(
+        id: Int,
+        language: String
+    ): Single<MovieDetail> {
+        return movieInterface.getMovieDetailExtra(id, language).map {
             it.toDomainMovieDetail()
         }
     }

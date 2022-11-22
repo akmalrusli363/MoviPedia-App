@@ -2,15 +2,17 @@ package com.tilikki.movipedia.view.main.discovery
 
 import androidx.paging.PagingData
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.view.main.BaseMovieViewModel
 import io.reactivex.Flowable
 
-class DiscoverMovieListViewModel : BaseMovieViewModel() {
+class DiscoverMovieListViewModel(
+    sharedPreferences: AppSharedPreferences
+) : BaseMovieViewModel(sharedPreferences) {
     override fun fetchMovieListAsFlowable(
-        page: Int,
         language: String,
-        region: String
+        region: String?
     ): Flowable<PagingData<Movie>> {
-        return movieRepository.getMovieList()
+        return movieRepository.getMovieList(language, region)
     }
 }

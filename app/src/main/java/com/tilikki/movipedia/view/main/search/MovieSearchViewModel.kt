@@ -11,10 +11,7 @@ import androidx.paging.rxjava2.cachedIn
 import com.tilikki.movipedia.db.MovieDatabase
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
-import com.tilikki.movipedia.repository.MoviePropertiesRepository
-import com.tilikki.movipedia.repository.MoviePropertiesRepositoryImpl
-import com.tilikki.movipedia.repository.MovieRxRepository
-import com.tilikki.movipedia.repository.MovieRxRepositoryImpl
+import com.tilikki.movipedia.repository.*
 import com.tilikki.movipedia.util.swapList
 import com.tilikki.movipedia.view.BaseDisposableViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +24,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
-class MovieSearchViewModel(movieDatabase: MovieDatabase) : BaseDisposableViewModel() {
+class MovieSearchViewModel(
+    movieDatabase: MovieDatabase,
+    private val sharedPreferences: AppSharedPreferences
+) : BaseDisposableViewModel() {
 
     var isSearching by mutableStateOf(false)
     var searchQuery = MutableStateFlow("")
@@ -54,7 +54,9 @@ class MovieSearchViewModel(movieDatabase: MovieDatabase) : BaseDisposableViewMod
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun fetchMovieList(searchQuery: String): Flow<PagingData<Movie>> {
-        return movieRxRepository.searchForMovie(searchQuery)
+        val language = sharedPreferences.getTmdbLanguage()
+        val region = sharedPreferences.getTmdbRegion()
+        return movieRxRepository.searchForMovie(searchQuery, language, region)
             .cachedIn(viewModelScope).asFlow()
     }
 

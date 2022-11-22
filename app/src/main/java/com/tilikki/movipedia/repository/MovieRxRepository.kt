@@ -29,7 +29,11 @@ interface MovieRxRepository {
         region: String? = null
     ): Flowable<PagingData<Movie>>
 
-    fun searchForMovie(searchQuery: String): Flowable<PagingData<Movie>>
+    fun searchForMovie(
+        searchQuery: String,
+        language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+        region: String? = null,
+    ): Flowable<PagingData<Movie>>
 
     fun getMovieListByGenreId(
         genreId: Int,

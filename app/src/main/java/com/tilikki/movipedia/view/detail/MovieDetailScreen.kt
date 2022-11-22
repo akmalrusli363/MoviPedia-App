@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.view.detail
 
+import android.content.Context
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -28,6 +29,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.tilikki.movipedia.model.*
 import com.tilikki.movipedia.model.general.Country
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
 import com.tilikki.movipedia.ui.component.NavigableLoadingScreen
 import com.tilikki.movipedia.ui.component.VideoList
@@ -46,7 +48,10 @@ import java.text.SimpleDateFormat
 fun MovieDetailScreen(
     movieId: Int,
     navController: NavHostController? = null,
-    viewModel: MovieDetailViewModel = viewModel()
+    context: Context = LocalContext.current,
+    viewModel: MovieDetailViewModel = viewModel {
+        MovieDetailViewModel(AppSharedPreferences(context))
+    }
 ) {
     if (movieId == Integer.MIN_VALUE) {
         val error = IllegalArgumentException("No movie ID provided!")
@@ -112,7 +117,7 @@ private fun MovieDetailContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(Alignment.CenterVertically)
-                        .defaultMinSize(minHeight = 120.dp)
+                        .defaultMinSize(minHeight = 150.dp)
                         .layoutId("image_backdrop"),
                     contentScale = ContentScale.FillWidth
                 )
@@ -140,7 +145,7 @@ private fun InnerMovieDetailContent(movie: MovieDetail) {
             .wrapContentSize()
             .shadow(4.dp)
             .padding(bottom = 4.dp)
-            .defaultMinSize(minHeight = 120.dp, minWidth = 80.dp),
+            .defaultMinSize(minHeight = 180.dp, minWidth = 120.dp),
         contentScale = ContentScale.Fit
     )
     Text(

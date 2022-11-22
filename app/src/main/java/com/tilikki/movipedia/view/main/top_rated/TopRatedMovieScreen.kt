@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.view.main.top_rated
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.util.toPagingDataFlow
@@ -25,7 +28,10 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun TopRatedMovieScreen(
     navController: NavController,
-    viewModel: TopRatedMovieViewModel = viewModel()
+    context: Context = LocalContext.current,
+    viewModel: TopRatedMovieViewModel = viewModel {
+        TopRatedMovieViewModel(AppSharedPreferences(context))
+    }
 ) {
     val movieList = remember { viewModel.movieList }
     TopRatedMovieContent(movieList = movieList, navController)

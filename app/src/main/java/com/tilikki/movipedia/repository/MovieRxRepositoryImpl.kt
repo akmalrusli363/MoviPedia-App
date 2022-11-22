@@ -60,11 +60,17 @@ class MovieRxRepositoryImpl : MovieRxRepository {
         }
     }
 
-    override fun searchForMovie(searchQuery: String): Flowable<PagingData<Movie>> {
+    override fun searchForMovie(
+        searchQuery: String,
+        language: String,
+        region: String?
+    ): Flowable<PagingData<Movie>> {
         return buildFlowablePagingData { page ->
             movieInterface.searchForMovies(
                 page = page,
-                query = searchQuery
+                query = searchQuery,
+                language = language,
+                region = region
             )
         }
     }

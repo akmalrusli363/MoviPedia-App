@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.view.main.search
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.db.MovieDatabase
 import com.tilikki.movipedia.model.Genre
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.ui.component.GenrePicker
 import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.component.generic.SearchView
@@ -32,9 +34,11 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun MovieSearchScreen(
     navController: NavController,
+    context: Context = LocalContext.current,
     viewModel: MovieSearchViewModel = viewModel(
         factory = MovieSearchViewModelFactory(
-            MovieDatabase.getInstance(LocalContext.current)
+            MovieDatabase.getInstance(context),
+            AppSharedPreferences(context)
         )
     )
 ) {

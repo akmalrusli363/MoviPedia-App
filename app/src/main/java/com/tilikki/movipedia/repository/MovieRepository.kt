@@ -33,9 +33,21 @@ interface MovieRepository {
         region: String? = null
     ): Single<ListResponse<MovieDto>>
 
-    fun searchForMovie(searchQuery: String): Single<ListResponse<MovieDto>>
-    fun getMovieDetail(id: Int): Single<MovieDetail>
-    fun getMovieDetailWithAdditionalFields(id: Int): Single<MovieDetail>
+    fun getMovieDetail(
+        id: Int,
+        language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+    ): Single<MovieDetail>
+
+    fun searchForMovie(
+        searchQuery: String,
+        language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+        region: String? = null
+    ): Single<ListResponse<MovieDto>>
+
+    fun getMovieDetailWithAdditionalFields(
+        id: Int,
+        language: String = Constants.DEFAULT_REQUEST_LANGUAGE,
+    ): Single<MovieDetail>
 
     fun getMovieListByGenreId(
         genreId: Int,

@@ -17,6 +17,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.movipedia.db.MovieDatabase
 import com.tilikki.movipedia.model.Movie
+import com.tilikki.movipedia.repository.AppSharedPreferences
 import com.tilikki.movipedia.ui.component.PagingMovieListScreen
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
 import com.tilikki.movipedia.util.rememberFlow
@@ -32,7 +33,8 @@ fun MovieByGenre(
     viewModel: MovieByGenreViewModel = viewModel(
         factory = MovieByGenreViewModelFactory(
             genreId = genreId,
-            database = MovieDatabase.getInstance(LocalContext.current)
+            database = MovieDatabase.getInstance(LocalContext.current),
+            sharedPreferences = AppSharedPreferences(LocalContext.current),
         )
     )
 ) {
