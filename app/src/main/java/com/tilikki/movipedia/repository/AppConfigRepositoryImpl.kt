@@ -1,12 +1,18 @@
 package com.tilikki.movipedia.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.tilikki.movipedia.db.MovieDatabase
+import com.tilikki.movipedia.db.entity.EntityCountry
+import com.tilikki.movipedia.db.entity.EntityLanguage
 import com.tilikki.movipedia.dto.CountryDataDto
 import com.tilikki.movipedia.dto.LanguageDto
 import com.tilikki.movipedia.dto.TmdbConfigDto
+import com.tilikki.movipedia.model.general.Country
+import com.tilikki.movipedia.model.general.Language
 import com.tilikki.movipedia.network.RetrofitInstance
 import com.tilikki.movipedia.repository.endpoint.AppConfigInterface
 import io.reactivex.Observable
@@ -16,6 +22,7 @@ import java.lang.reflect.Type
 class AppConfigRepositoryImpl(private val context: Context) : AppConfigRepository {
     private val retrofit = RetrofitInstance.getCachedRetrofitInstance(context)
     private val appConfigInterface = retrofit.create(AppConfigInterface::class.java)
+    private val database: MovieDatabase = MovieDatabase.getInstance(context)
 
     override fun getAppConfig(): Single<TmdbConfigDto> {
         return appConfigInterface.getConfiguration()
@@ -66,12 +73,32 @@ class AppConfigRepositoryImpl(private val context: Context) : AppConfigRepositor
         }
     }
 
-    override fun getCountriesList(): Observable<List<CountryDataDto>> {
+    override fun getCountriesList(): Observable<List<Country>> {
+        val fallbackObservable = database.appConfigDao()
+            .getAllCountries()
+            .map { it.map(EntityCountry::toDomainCountry) }
         return appConfigInterface.getCountriesList()
+            .map { dto ->
+                val countryList = dto.map(CountryDataDto::toEntityCountry)
+                Log.d("mvfetcher", "fetched & insert to db $countryList")
+                database.appConfigDao().insertCountryList(countryList)
+                dto.map(CountryDataDto::toDomainCountry)
+            }
+            .onErrorResumeNext(fallbackObservable)
     }
 
-    override fun getLanguagesList(): Observable<List<LanguageDto>> {
+    override fun getLanguagesList(): Observable<List<Language>> {
+        val fallbackObservable = database.appConfigDao()
+            .getAllLanguages()
+            .map { it.map(EntityLanguage::toDomainLanguage) }
         return appConfigInterface.getLanguagesList()
+            .map { dto ->
+                val languageList = dto.map(LanguageDto::toEntityLanguage)
+                Log.d("mvfetcher", "fetched & insert to db $languageList")
+                database.appConfigDao().insertLanguageList(languageList)
+                dto.map(LanguageDto::toDomainLanguage)
+            }
+            .onErrorResumeNext(fallbackObservable)
     }
 
     override fun getTranslationsList(): Observable<List<String>> {

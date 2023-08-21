@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.dto
 
 import com.google.gson.annotations.SerializedName
+import com.tilikki.movipedia.db.entity.EntityCountry
 import com.tilikki.movipedia.model.general.Country
 
 data class CountryDataDto(
@@ -10,5 +11,12 @@ data class CountryDataDto(
 ) {
     fun toDomainCountry(): Country {
         return Country(name, iso_3166_1)
+    }
+
+    fun toEntityCountry(): EntityCountry {
+        return EntityCountry(
+            name = name,
+            countryCode = iso_3166_1
+        )
     }
 }

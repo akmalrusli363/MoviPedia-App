@@ -50,10 +50,9 @@ class AppInfoViewModel(
         val disposableFetchCountriesList = appConfigRepo.getCountriesList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ dto ->
-                val domainList = dto.map { it.toDomainCountry() }
-                Log.d("MvFetcher", domainList.toString())
-                countryList.swapList(domainList)
+            .subscribe({ list ->
+                Log.d("MvFetcher", list.toString())
+                countryList.swapList(list)
             }, { err ->
                 Log.e("MvFetcher", err.message, err)
             })

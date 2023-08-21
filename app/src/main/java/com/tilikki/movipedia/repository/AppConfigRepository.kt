@@ -1,8 +1,8 @@
 package com.tilikki.movipedia.repository
 
-import com.tilikki.movipedia.dto.CountryDataDto
-import com.tilikki.movipedia.dto.LanguageDto
 import com.tilikki.movipedia.dto.TmdbConfigDto
+import com.tilikki.movipedia.model.general.Country
+import com.tilikki.movipedia.model.general.Language
 import io.reactivex.Observable
 import io.reactivex.Single
 
@@ -18,7 +18,7 @@ interface AppConfigRepository {
     fun getLocalAppConfig(): TmdbConfigDto
     fun setLocalAppConfig(tmdbConfigDto: TmdbConfigDto)
 
-    fun getCountriesList(): Observable<List<CountryDataDto>>
-    fun getLanguagesList(): Observable<List<LanguageDto>>
+    fun getCountriesList(): Observable<List<Country>>
+    fun getLanguagesList(): Observable<List<Language>>
     fun getTranslationsList(): Observable<List<String>>
 }

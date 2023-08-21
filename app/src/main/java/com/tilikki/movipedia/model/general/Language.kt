@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.model.general
 
+import com.tilikki.movipedia.db.entity.EntityLanguage
 import java.util.*
 
 data class Language(
@@ -23,5 +24,12 @@ data class Language(
                 name = getLanguageName(languageCode)
             )
         }
+    }
+
+    fun asEntityLanguage(): EntityLanguage {
+        return EntityLanguage(
+            languageCode = languageCode,
+            name = name
+        )
     }
 }

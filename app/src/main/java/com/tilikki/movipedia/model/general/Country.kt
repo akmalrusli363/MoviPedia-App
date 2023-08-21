@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.model.general
 
+import com.tilikki.movipedia.db.entity.EntityCountry
 import com.tilikki.movipedia.util.generateCountryFlagEmoji
 import java.util.*
 
@@ -9,6 +10,13 @@ data class Country(
 ) {
     fun getCountryFlagEmoji(): String {
         return generateCountryFlagEmoji(countryCode)
+    }
+
+    fun asEntityCountry(): EntityCountry {
+        return EntityCountry(
+            name = name,
+            countryCode = countryCode
+        )
     }
 
     companion object {
