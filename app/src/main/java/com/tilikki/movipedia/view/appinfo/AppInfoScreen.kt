@@ -4,10 +4,17 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,6 +24,8 @@ import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.model.general.Language
 import com.tilikki.movipedia.ui.component.generic.DropDownMenu
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
+import com.tilikki.movipedia.view.ThemeEngineViewModel
+import com.tilikki.movipedia.view.ThemeEngineViewModelFactory
 import com.tilikki.movipedia.view.navigation.NavigationBackButton
 
 @Composable
@@ -24,38 +33,35 @@ fun AppInfoScreen(
     viewModel: AppInfoViewModel = viewModel(
         factory = AppInfoViewModelFactory(LocalContext.current)
     ),
+    themeViewModel: ThemeEngineViewModel = viewModel(
+        factory = ThemeEngineViewModelFactory(LocalContext.current)
+    ),
     navController: NavHostController? = null
 ) {
     val countryList = remember { viewModel.countryList }
     val languageList = remember { viewModel.languageList }
     val defaultSystemDarkMode = isSystemInDarkTheme()
-    val darkMode = remember {
-        mutableStateOf(viewModel.isDarkMode(defaultSystemDarkMode))
-    }
+    val darkMode = themeViewModel.darkMode.observeAsState(initial = defaultSystemDarkMode)
     val configData = AppInfoConfigData(
         countryList, languageList, viewModel.getTmdbRegion(), viewModel.getTmdbLanguage()
     )
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchConfig()
     }
-    MoviPediaTheme(darkTheme = darkMode.value) {
-        Surface(color = MaterialTheme.colors.background) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = "Settings") },
-                        navigationIcon = { NavigationBackButton(navController = navController) }
-                    )
-                }
-            ) {
-                AppInfoContent(
-                    darkMode = darkMode,
-                    configData = configData,
-                    modifier = Modifier.padding(it),
-                    onChangeConfigDataAction = AppInfoConfigActionsImpl(viewModel)
-                )
-            }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Settings") },
+                navigationIcon = { NavigationBackButton(navController = navController) }
+            )
         }
+    ) {
+        AppInfoContent(
+            darkMode = darkMode,
+            configData = configData,
+            modifier = Modifier.padding(it),
+            onChangeConfigDataAction = AppInfoConfigActionsImpl(viewModel, themeViewModel)
+        )
     }
 }
 
@@ -85,7 +91,7 @@ private fun AppInfoScreen(
 
 @Composable
 private fun AppInfoContent(
-    darkMode: MutableState<Boolean>,
+    darkMode: State<Boolean>,
     configData: AppInfoConfigData,
     modifier: Modifier = Modifier,
     onChangeConfigDataAction: AppInfoConfigActions = MockAppInfoConfigActionsImpl()
@@ -101,8 +107,7 @@ private fun AppInfoContent(
             ) {
                 Text("Theme")
                 IconToggleButton(checked = darkMode.value, onCheckedChange = {
-                    darkMode.value = !darkMode.value
-                    onChangeConfigDataAction.onChangeAppTheme(darkMode.value)
+                    onChangeConfigDataAction.onChangeAppTheme(it)
                 }) {
                     if (darkMode.value) {
                         Icon(
@@ -161,6 +166,39 @@ private fun AppInfoContent(
                         Text(text = language.name)
                     }
                 }
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "MoviPadia App, powered by TMDB API",
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "by @akmalrusli363", fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+                val creditInfoText = buildAnnotatedString {
+                    append("This product ")
+                    withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                        append("uses the TMDB API")
+                    }
+                    append("\nbut is ")
+                    withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append("not endorsed or certified")
+                    }
+                    append(" by TMDB.")
+                }
+                Text(
+                    text = creditInfoText,
+                    style = MaterialTheme.typography.caption,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .padding(horizontal = 4.dp, vertical = 8.dp),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.tilikki.movipedia.view.ThemeEngineViewModel
 import com.tilikki.movipedia.view.appinfo.AppInfoScreen
 import com.tilikki.movipedia.view.detail.MovieDetailScreen
 import com.tilikki.movipedia.view.main.catalogue.MovieByGenre
@@ -14,7 +15,7 @@ import com.tilikki.movipedia.view.main.trending.TrendingMovieScreen
 import com.tilikki.movipedia.view.main.upcoming.UpcomingMovieScreen
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, themeEngineViewModel: ThemeEngineViewModel) {
     NavHost(
         navController = navController,
         startDestination = Screens.MovieList.route
@@ -39,7 +40,7 @@ fun NavGraph(navController: NavHostController) {
             MovieByGenre(genreId = genreId, navController = navController)
         }
         composable(route = Screens.AppSettings.route) {
-            AppInfoScreen(navController = navController)
+            AppInfoScreen(navController = navController, themeViewModel = themeEngineViewModel)
         }
     }
 }

@@ -19,14 +19,6 @@ class AppInfoViewModel(
     val countryList: MutableList<Country> = mutableStateListOf()
     val languageList: MutableList<Language> = mutableStateListOf(getTmdbLanguage())
 
-    fun isDarkMode(defaultDarkModeOption: Boolean): Boolean {
-        return sharedPreferences.isDarkMode(defaultDarkModeOption)
-    }
-
-    fun switchThemeMode(darkMode: Boolean) {
-        sharedPreferences.switchThemeMode(darkMode)
-    }
-
     fun setTmdbLanguage(language: Language) {
         sharedPreferences.setTmdbLanguage(language)
     }
