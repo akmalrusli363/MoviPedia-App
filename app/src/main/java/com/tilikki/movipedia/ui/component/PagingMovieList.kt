@@ -7,8 +7,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -40,7 +44,7 @@ fun PagingMovieListScreen(
             onRetryAction = { lazyMovieList.retry() }
         )
     } else {
-        PagingMovieList(
+        StaggeredPagingMovieList(
             lazyMovieList = lazyMovieList,
             modifier = Modifier.padding(8.dp),
             onMovieCardItemClick = onMovieCardItemClick
@@ -88,6 +92,48 @@ fun PagingMovieList(
     }
 }
 
+@Composable
+fun StaggeredPagingMovieList(
+    lazyMovieList: LazyPagingItems<Movie>,
+    modifier: Modifier = Modifier,
+    onMovieCardItemClick: (Int) -> Unit = {},
+) {
+    val loadState = lazyMovieList.loadState
+    val isFetchMore = loadState.append is LoadState.Loading
+
+    if (lazyMovieList.itemCount == 0) {
+        MovieNotFoundScreen(null)
+    } else {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                modifier = modifier,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                items(lazyMovieList.itemCount) { mIndex ->
+                    lazyMovieList[mIndex]?.let {
+                        MovieCard(
+                            movie = it,
+                            onMovieCardClick = onMovieCardItemClick
+                        )
+                    }
+                }
+                item {
+                    if (isFetchMore) {
+                        LoadingBox(modifier)
+                    } else {
+                        Text(
+                            text = "End of movie list",
+                            modifier = modifier.padding(16.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Preview(widthDp = 360)
 @Composable
 private fun ShowMovieList() {
@@ -112,20 +158,16 @@ private fun ShowMovieListAppend() {
         Movie(id = 3, title = "Pig Pork is Pork", releaseDate = "2022-03-20")
     )
     val modifier = Modifier.padding(16.dp)
-    Column {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(Constants.MOVIE_LIST_GRID_COLUMNS),
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(2),
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = modifier
         ) {
             items(movieList) { movie ->
                 MovieCard(movie = movie)
             }
-            item(span = { GridItemSpan(Constants.MOVIE_LIST_GRID_COLUMNS) }) {
-                Column {
-                    LoadingBox(modifier)
-                }
-            }
         }
+        LoadingBox(modifier)
     }
 }
