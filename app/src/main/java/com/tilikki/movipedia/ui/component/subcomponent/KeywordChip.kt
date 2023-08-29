@@ -1,5 +1,7 @@
 package com.tilikki.movipedia.ui.component.subcomponent
 
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
 import com.tilikki.movipedia.model.Keyword
 import com.tilikki.movipedia.ui.component.generic.GenericChip
 import com.tilikki.movipedia.ui.theme.getChipBackgroundColor
@@ -28,6 +29,7 @@ fun KeywordChip(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun KeywordChips(
     keywords: List<Keyword>,
