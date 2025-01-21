@@ -1,5 +1,6 @@
 package com.tilikki.movipedia.ui.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -18,16 +19,16 @@ fun ErrorScreen(
     painterContentDescription: String = "",
     errorMessage: String,
     error: Throwable? = null,
+    modifier: Modifier = Modifier,
 ) {
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp, vertical = 16.dp),
+        modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)
         ) {
             Icon(
                 painter = painter,
@@ -56,17 +57,17 @@ fun RetriableErrorScreen(
     painterContentDescription: String = "",
     errorMessage: String,
     error: Throwable? = null,
+    modifier: Modifier = Modifier,
     onRetryAction: () -> Unit = {},
 ) {
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp, vertical = 16.dp),
+        modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)
         ) {
             Icon(
                 painter = painter,
@@ -93,22 +94,31 @@ fun RetriableErrorScreen(
 }
 
 @Composable
-fun MovieNotFoundScreen(error: Exception?) {
+fun MovieNotFoundScreen(
+    error: Exception?,
+    modifier: Modifier = Modifier
+) {
     ErrorScreen(
         painter = painterResource(id = R.drawable.ic_baseline_local_movies_24),
         errorMessage = "Movie not found!",
         painterContentDescription = "Movie",
-        error = error
+        error = error,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun MovieFetchErrorScreen(error: Exception?, onRetryAction: () -> Unit = {}) {
+fun MovieFetchErrorScreen(
+    error: Exception?,
+    modifier: Modifier = Modifier,
+    onRetryAction: () -> Unit = {}
+) {
     RetriableErrorScreen(
         painter = painterResource(id = R.drawable.ic_baseline_cloud_off_24),
         errorMessage = "Error while fetch movie!",
         painterContentDescription = "Movie",
         error = error,
+        modifier = modifier,
         onRetryAction = onRetryAction,
     )
 }
@@ -124,3 +134,16 @@ private fun PreviewMovieNotFoundScreen() {
 private fun PreviewMovieFetchErrorScreen() {
     MovieFetchErrorScreen(error = null)
 }
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun PreviewMovieNotFoundScreenDarkTheme() {
+    MovieNotFoundScreen(error = null)
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+private fun PreviewMovieFetchErrorScreenDarkTheme() {
+    MovieFetchErrorScreen(error = null)
+}
+
