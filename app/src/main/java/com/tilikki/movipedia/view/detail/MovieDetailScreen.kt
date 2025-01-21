@@ -30,6 +30,7 @@ import com.tilikki.movipedia.model.*
 import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.ui.component.MovieNotFoundScreen
 import com.tilikki.movipedia.ui.component.NavigableLoadingScreen
+import com.tilikki.movipedia.ui.component.NavigableScreen
 import com.tilikki.movipedia.ui.component.VideoList
 import com.tilikki.movipedia.ui.component.subcomponent.*
 import com.tilikki.movipedia.ui.theme.MoviPediaTheme
@@ -51,7 +52,9 @@ fun MovieDetailScreen(
     if (movieId == Integer.MIN_VALUE) {
         val error = IllegalArgumentException("No movie ID provided!")
         Toast.makeText(LocalContext.current, error.message, Toast.LENGTH_LONG).show()
-        MovieNotFoundScreen(error)
+        NavigableScreen(navController, "Movie detail") {
+            MovieNotFoundScreen(error)
+        }
         return
     }
     val movieDetail = viewModel.movieDetail
@@ -60,9 +63,14 @@ fun MovieDetailScreen(
         viewModel.getMovieDetail(movieId)
     }
     if (isLoading) {
-        NavigableLoadingScreen(navHostController = navController)
+        NavigableLoadingScreen(
+            navHostController = navController,
+            title = "Getting movie information..."
+        )
     } else if (movieDetail == null) {
-        MovieNotFoundScreen(null)
+        NavigableScreen(navController, "Movie detail") {
+            MovieNotFoundScreen(null)
+        }
     } else {
         MovieDetailContent(movie = movieDetail, navController = navController)
     }
