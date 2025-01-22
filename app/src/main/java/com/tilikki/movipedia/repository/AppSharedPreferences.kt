@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.repository
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.tilikki.movipedia.helper.Constants
 import com.tilikki.movipedia.model.general.Country
 import com.tilikki.movipedia.model.general.Language
@@ -45,5 +46,13 @@ class AppSharedPreferences(context: Context) {
     fun getTmdbLanguage(): String {
         return sharedPreferences.getString(TMDB_LANGUAGE, Constants.DEFAULT_REQUEST_LANGUAGE)
             ?: Constants.DEFAULT_REQUEST_LANGUAGE
+    }
+
+    fun registerSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    fun unregisterSharedPreferenceChangeListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
     }
 }
