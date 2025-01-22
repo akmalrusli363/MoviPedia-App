@@ -5,6 +5,7 @@ import com.tilikki.movipedia.BuildConfig
 import com.tilikki.movipedia.util.TimeInterval
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,10 +35,13 @@ object RetrofitInstance {
     }
 
     private fun getOkHttpClientInstance(): OkHttpClient {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+            .setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient()
             .newBuilder()
             .addInterceptor(ApiKeyInterceptor(API_KEY))
             .addInterceptor(LoggingInterceptor())
+            .addInterceptor(httpLoggingInterceptor)
             .build()
     }
 
