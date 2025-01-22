@@ -1,6 +1,8 @@
 package com.tilikki.movipedia.ui.theme
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
@@ -47,7 +49,12 @@ fun MoviPediaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         colors = colors,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = {
+            Box(
+                modifier = Modifier.background(color = colors.background),
+                content = { content.invoke() }
+            )
+        }
     )
 }
 
@@ -99,9 +106,11 @@ private fun PreviewElement(darkMode: Boolean) {
                 }
             }
         ) {
-            Column(modifier = Modifier
-                .padding(it)
-                .padding(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .padding(16.dp)
+            ) {
                 CircularProgressIndicator()
                 Text(text = "title", style = MaterialTheme.typography.h4)
                 Checkbox(checked = true, onCheckedChange = {})
