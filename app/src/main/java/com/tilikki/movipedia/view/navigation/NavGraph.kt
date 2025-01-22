@@ -1,9 +1,15 @@
 package com.tilikki.movipedia.view.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.navigation.*
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.tilikki.movipedia.view.ThemeEngineViewModel
 import com.tilikki.movipedia.view.appinfo.AppInfoScreen
 import com.tilikki.movipedia.view.detail.MovieDetailScreen
@@ -39,7 +45,13 @@ fun NavGraph(navController: NavHostController, themeEngineViewModel: ThemeEngine
                 ?: Integer.MIN_VALUE
             MovieByGenre(genreId = genreId, navController = navController)
         }
-        composable(route = Screens.AppSettings.route) {
+        composable(route = Screens.AppSettings.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(500))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(500))
+            }) {
             AppInfoScreen(navController = navController, themeViewModel = themeEngineViewModel)
         }
     }
