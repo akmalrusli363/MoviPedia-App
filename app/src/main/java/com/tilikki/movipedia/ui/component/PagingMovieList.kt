@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -10,7 +11,11 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +31,7 @@ import com.tilikki.movipedia.ui.util.throwInToast
 import com.tilikki.movipedia.util.asException
 import com.tilikki.movipedia.util.getErrors
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PagingMovieListScreen(
     lazyMovieList: LazyPagingItems<Movie>,
@@ -34,6 +40,7 @@ fun PagingMovieListScreen(
     val loadState = lazyMovieList.loadState
     val isLoading = loadState.refresh is LoadState.Loading
     val errorState = loadState.getErrors()
+    val refreshMovieState = rememberPullRefreshState(isLoading, lazyMovieList::refresh)
 
     if (isLoading) {
         LoadingScreen()
@@ -44,11 +51,14 @@ fun PagingMovieListScreen(
             onRetryAction = { lazyMovieList.retry() }
         )
     } else {
-        StaggeredPagingMovieList(
-            lazyMovieList = lazyMovieList,
-            modifier = Modifier.padding(8.dp),
-            onMovieCardItemClick = onMovieCardItemClick
-        )
+        Box(modifier = Modifier.pullRefresh(refreshMovieState)) {
+            StaggeredPagingMovieList(
+                lazyMovieList = lazyMovieList,
+                modifier = Modifier.padding(8.dp),
+                onMovieCardItemClick = onMovieCardItemClick
+            )
+            PullRefreshIndicator(isLoading, refreshMovieState, Modifier.align(Alignment.TopCenter))
+        }
     }
 }
 
