@@ -136,7 +136,7 @@ fun StaggeredPagingMovieList(
                         )
                     }
                 }
-                item {
+                item(span = StaggeredGridItemSpan.FullLine) {
                     if (isFetchMore) {
                         LoadingBox(modifier)
                     } else {
