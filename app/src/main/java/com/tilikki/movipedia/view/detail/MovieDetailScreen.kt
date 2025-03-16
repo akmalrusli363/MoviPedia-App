@@ -2,6 +2,7 @@ package com.tilikki.movipedia.view.detail
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -101,7 +102,9 @@ private fun MovieDetailContent(
         topBar = {
             TopAppBar(
                 title = { Text(text = movie.title) },
-                navigationIcon = { NavigationBackButton(navController = navController) }
+                navigationIcon = { NavigationBackButton(navController = navController) },
+                modifier = Modifier.background(MaterialTheme.colors.primarySurface)
+                    .padding(top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding())
             )
         }
     ) {

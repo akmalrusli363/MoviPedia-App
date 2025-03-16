@@ -15,7 +15,7 @@ import com.tilikki.movipedia.ui.util.TonedBottomNavigationBar
 
 @Composable
 fun HomeBottomNavigationBar(navController: NavHostController) {
-    TonedBottomNavigationBar {
+    TonedBottomNavigationBar() {
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
 

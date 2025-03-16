@@ -1,6 +1,6 @@
 package com.tilikki.movipedia.view.main.upcoming
 
-import androidx.compose.foundation.layout.Column
+\import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -40,6 +40,7 @@ private fun UpcomingMovieContent(
         Text(
             text = "Upcoming movies",
             style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()

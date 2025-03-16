@@ -72,8 +72,10 @@ fun MovieSearchContent(
         Text(
             text = "Search",
             style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(16.dp)
+                .fillMaxWidth()
         )
         SearchView(
             searchText = searchQuery,

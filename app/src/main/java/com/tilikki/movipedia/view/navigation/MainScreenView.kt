@@ -1,7 +1,11 @@
 package com.tilikki.movipedia.view.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -15,6 +19,7 @@ fun MainScreenView(navController: NavHostController, content: @Composable () -> 
         Surface(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding())
                 .padding(it),
             color = MaterialTheme.colors.background,
             content = content

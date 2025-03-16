@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.view.main.discovery
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -40,6 +41,7 @@ private fun HomeScreenContent(
         Text(
             text = "Featured movies",
             style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()

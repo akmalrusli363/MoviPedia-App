@@ -44,12 +44,14 @@ private fun TrendingMovieContent(
             Text(
                 text = "Trending movies",
                 style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier
                     .padding(16.dp)
             )
             Text(
                 text = "WEEKLY",
                 style = MaterialTheme.typography.subtitle2,
+                color = MaterialTheme.colors.primary,
                 modifier = Modifier
                     .padding(16.dp),
             )

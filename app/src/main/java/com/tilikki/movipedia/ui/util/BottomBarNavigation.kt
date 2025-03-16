@@ -3,14 +3,25 @@ package com.tilikki.movipedia.ui.util
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigationDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.ui.theme.Orange700
 import com.tilikki.movipedia.ui.theme.WhiteAlt
 
@@ -21,11 +32,13 @@ fun TonedBottomNavigationBar(
     content: @Composable RowScope.() -> Unit
 ) {
     val isLight = MaterialTheme.colors.isLight
-    BottomNavigation(
-        backgroundColor = if (isLight) WhiteAlt else MaterialTheme.colors.primarySurface,
+    val bottomBarPadding = WindowInsets.systemBars.asPaddingValues().calculateBottomPadding()
+    val backgroundColor = if (isLight) WhiteAlt else MaterialTheme.colors.primarySurface
+    BottomAppBar(
+        backgroundColor = backgroundColor,
         contentColor = if (isLight) Orange700 else MaterialTheme.colors.onBackground,
-        modifier = modifier,
-        elevation = elevation,
+        modifier = modifier.background(backgroundColor).padding(bottom = bottomBarPadding),
+        elevation = 0.dp,
         content = content,
     )
 }

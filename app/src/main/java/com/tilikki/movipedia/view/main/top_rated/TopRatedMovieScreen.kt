@@ -40,6 +40,7 @@ private fun TopRatedMovieContent(
         Text(
             text = "Top rated movies",
             style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()

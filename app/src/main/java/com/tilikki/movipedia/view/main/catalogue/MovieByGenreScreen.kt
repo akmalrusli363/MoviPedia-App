@@ -1,8 +1,13 @@
 package com.tilikki.movipedia.view.main.catalogue
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,7 +64,10 @@ private fun MovieByCategoryScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = category) },
-                navigationIcon = { NavigationBackButton(navController = navController) }
+                navigationIcon = { NavigationBackButton(navController = navController) },
+                modifier = Modifier
+                    .background(MaterialTheme.colors.primarySurface)
+                    .padding(top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding())
             )
         }
     ) {
