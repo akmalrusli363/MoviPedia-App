@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.view.main.top_rated
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -25,16 +26,18 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun TopRatedMovieScreen(
     navController: NavController,
-    viewModel: TopRatedMovieViewModel = viewModel()
+    viewModel: TopRatedMovieViewModel = viewModel(),
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val movieList = remember { viewModel.movieList }
-    TopRatedMovieContent(movieList = movieList, navController)
+    TopRatedMovieContent(movieList = movieList, navController, contentPadding)
 }
 
 @Composable
 private fun TopRatedMovieContent(
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column {
         Text(
@@ -49,7 +52,8 @@ private fun TopRatedMovieContent(
             lazyMovieList = movieList.collectAsLazyPagingItems(),
             onMovieCardItemClick = { movieId ->
                 Screens.MovieDetail.navigateTo(navController, movieId)
-            }
+            },
+            contentPadding = contentPadding,
         )
     }
 }

@@ -3,6 +3,7 @@ package com.tilikki.movipedia.ui.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -35,6 +37,7 @@ import com.tilikki.movipedia.util.getErrors
 @Composable
 fun PagingMovieListScreen(
     lazyMovieList: LazyPagingItems<Movie>,
+    contentPadding: PaddingValues = PaddingValues(),
     onMovieCardItemClick: (Int) -> Unit = {},
 ) {
     val loadState = lazyMovieList.loadState
@@ -54,8 +57,9 @@ fun PagingMovieListScreen(
         Box(modifier = Modifier.pullRefresh(refreshMovieState)) {
             StaggeredPagingMovieList(
                 lazyMovieList = lazyMovieList,
-                modifier = Modifier.padding(8.dp),
-                onMovieCardItemClick = onMovieCardItemClick
+                modifier = Modifier.padding(horizontal = 8.dp),
+                onMovieCardItemClick = onMovieCardItemClick,
+                contentPadding = contentPadding,
             )
             PullRefreshIndicator(isLoading, refreshMovieState, Modifier.align(Alignment.TopCenter))
         }
@@ -67,6 +71,7 @@ fun PagingMovieList(
     lazyMovieList: LazyPagingItems<Movie>,
     modifier: Modifier = Modifier,
     onMovieCardItemClick: (Int) -> Unit = {},
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val loadState = lazyMovieList.loadState
     val isFetchMore = loadState.append is LoadState.Loading
@@ -78,6 +83,7 @@ fun PagingMovieList(
             columns = GridCells.Fixed(Constants.MOVIE_LIST_GRID_COLUMNS),
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = modifier,
+            contentPadding = contentPadding,
         ) {
             items(lazyMovieList.itemCount) { mIndex ->
                 lazyMovieList[mIndex]?.let {
@@ -107,6 +113,7 @@ fun StaggeredPagingMovieList(
     lazyMovieList: LazyPagingItems<Movie>,
     modifier: Modifier = Modifier,
     onMovieCardItemClick: (Int) -> Unit = {},
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val loadState = lazyMovieList.loadState
     val isFetchMore = loadState.append is LoadState.Loading
@@ -119,6 +126,7 @@ fun StaggeredPagingMovieList(
                 columns = StaggeredGridCells.Fixed(2),
                 modifier = modifier,
                 horizontalArrangement = Arrangement.SpaceEvenly,
+                contentPadding = contentPadding,
             ) {
                 items(lazyMovieList.itemCount) { mIndex ->
                     lazyMovieList[mIndex]?.let {

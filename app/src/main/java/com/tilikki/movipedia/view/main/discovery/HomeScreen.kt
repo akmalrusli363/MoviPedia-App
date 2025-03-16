@@ -26,16 +26,18 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: DiscoverMovieListViewModel = viewModel()
+    viewModel: DiscoverMovieListViewModel = viewModel(),
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val movieList = rememberFlow(viewModel.movieList)
-    HomeScreenContent(movieList = movieList, navController)
+    HomeScreenContent(movieList = movieList, navController, contentPadding)
 }
 
 @Composable
 private fun HomeScreenContent(
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column {
         Text(
@@ -48,6 +50,7 @@ private fun HomeScreenContent(
         )
         PagingMovieListScreen(
             lazyMovieList = movieList.collectAsLazyPagingItems(),
+            contentPadding = contentPadding,
             onMovieCardItemClick = { movieId ->
                 Screens.MovieDetail.navigateTo(navController, movieId)
             }

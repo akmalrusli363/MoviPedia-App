@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.view.main.upcoming
 
-\import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -25,16 +26,18 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun UpcomingMovieScreen(
     navController: NavController,
-    viewModel: UpcomingMovieViewModel = viewModel()
+    viewModel: UpcomingMovieViewModel = viewModel(),
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val movieList = rememberFlow(viewModel.movieList)
-    UpcomingMovieContent(movieList = movieList, navController)
+    UpcomingMovieContent(movieList = movieList, navController, contentPadding)
 }
 
 @Composable
 private fun UpcomingMovieContent(
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column {
         Text(
@@ -49,7 +52,8 @@ private fun UpcomingMovieContent(
             lazyMovieList = movieList.collectAsLazyPagingItems(),
             onMovieCardItemClick = { movieId ->
                 Screens.MovieDetail.navigateTo(navController, movieId)
-            }
+            },
+            contentPadding = contentPadding,
         )
     }
 }

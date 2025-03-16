@@ -46,28 +46,28 @@ fun NavGraphBuilder.movieList(navController: NavHostController) {
         route = Screens.MovieList.route
     ) {
         composable(route = Screens.FeaturedMovies.route) {
-            MainScreenView(navController = navController) {
-                HomeScreen(navController)
+            MainScreenView(navController = navController) { innerPadding ->
+                HomeScreen(navController, contentPadding = innerPadding)
             }
         }
         composable(route = Screens.TrendingMovies.route) {
-            MainScreenView(navController = navController) {
-                TrendingMovieScreen(navController)
+            MainScreenView(navController = navController) { innerPadding ->
+                TrendingMovieScreen(navController, contentPadding = innerPadding)
             }
         }
         composable(route = Screens.UpcomingMovies.route) {
-            MainScreenView(navController = navController) {
-                UpcomingMovieScreen(navController)
+            MainScreenView(navController = navController) { innerPadding ->
+                UpcomingMovieScreen(navController, contentPadding = innerPadding)
             }
         }
         composable(route = Screens.TopRatedMovies.route) {
-            MainScreenView(navController = navController) {
-                TopRatedMovieScreen(navController)
+            MainScreenView(navController = navController) { innerPadding ->
+                TopRatedMovieScreen(navController, contentPadding = innerPadding)
             }
         }
         composable(route = Screens.SearchMovies.route) {
-            MainScreenView(navController = navController) {
-                MovieSearchScreen(navController)
+            MainScreenView(navController = navController) { innerPadding ->
+                MovieSearchScreen(navController, contentPadding = innerPadding)
             }
         }
     }

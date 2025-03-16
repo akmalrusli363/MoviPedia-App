@@ -73,13 +73,13 @@ private fun MovieByCategoryScreen(
     ) {
         Surface(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
+                .fillMaxSize(),
             color = MaterialTheme.colors.background
         ) {
             MovieByCategoryContent(
                 movieList = movieList,
-                navController = navController
+                navController = navController,
+                contentPadding = it,
             )
         }
     }
@@ -89,10 +89,12 @@ private fun MovieByCategoryScreen(
 private fun MovieByCategoryContent(
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
+    contentPadding: PaddingValues,
 ) {
     Column {
         PagingMovieListScreen(
             lazyMovieList = movieList.collectAsLazyPagingItems(),
+            contentPadding = contentPadding,
             onMovieCardItemClick = { movieId ->
                 Screens.MovieDetail.navigateTo(navController, movieId)
             }

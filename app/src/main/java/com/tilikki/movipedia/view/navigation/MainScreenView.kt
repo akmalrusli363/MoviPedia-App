@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 
 @Composable
-fun MainScreenView(navController: NavHostController, content: @Composable () -> Unit) {
+fun MainScreenView(navController: NavHostController, content: @Composable (PaddingValues) -> Unit) {
     Scaffold(bottomBar = { HomeBottomNavigationBar(navController = navController) }) {
         Surface(
             modifier = Modifier
@@ -22,7 +22,7 @@ fun MainScreenView(navController: NavHostController, content: @Composable () -> 
                 .padding(top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding())
                 .padding(it),
             color = MaterialTheme.colors.background,
-            content = content
+            content = { content(it) }
         )
     }
 }

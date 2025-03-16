@@ -1,6 +1,7 @@
 package com.tilikki.movipedia.view.main.search
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -36,7 +37,8 @@ fun MovieSearchScreen(
         factory = MovieSearchViewModelFactory(
             MovieDatabase.getInstance(LocalContext.current)
         )
-    )
+    ),
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val movieList = remember { viewModel.movieList }
     val genreList = remember { viewModel.genreList }
@@ -54,7 +56,8 @@ fun MovieSearchScreen(
         navController = navController,
         onSearch = onSearch,
         onClearSearch = { viewModel.isSearching = false },
-        searchQuery = searchQuery.value
+        searchQuery = searchQuery.value,
+        contentPadding = contentPadding,
     )
 }
 
@@ -67,6 +70,7 @@ fun MovieSearchContent(
     onSearch: (String) -> Unit,
     onClearSearch: () -> Unit = {},
     searchQuery: String = "",
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column() {
         Text(
@@ -89,6 +93,7 @@ fun MovieSearchContent(
         if (isSearching) {
             PagingMovieListScreen(
                 lazyMovieList = movieList.collectAsLazyPagingItems(),
+                contentPadding = contentPadding,
                 onMovieCardItemClick = { movieId ->
                     Screens.MovieDetail.navigateTo(navController, movieId)
                 }
@@ -125,7 +130,9 @@ private fun PreviewMovieSearchScreenInitialState() {
             genreList = genreList,
             isSearching = false,
             navController = rememberNavController(),
-            onSearch = {})
+            onSearch = {},
+            contentPadding = PaddingValues(),
+        )
     }
 }
 
@@ -152,6 +159,7 @@ private fun PreviewMovieSearchScreen() {
             isSearching = true,
             navController = rememberNavController(),
             onSearch = {},
+            contentPadding = PaddingValues(),
         )
     }
 }

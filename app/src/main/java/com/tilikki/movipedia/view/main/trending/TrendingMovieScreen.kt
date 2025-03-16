@@ -24,16 +24,18 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun TrendingMovieScreen(
     navController: NavController,
-    viewModel: TrendingMovieViewModel = viewModel()
+    viewModel: TrendingMovieViewModel = viewModel(),
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val movieList = remember { viewModel.movieList }
-    TrendingMovieContent(movieList = movieList, navController)
+    TrendingMovieContent(movieList = movieList, navController, contentPadding)
 }
 
 @Composable
 private fun TrendingMovieContent(
     movieList: Flow<PagingData<Movie>>,
     navController: NavController,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column {
         Row(
@@ -60,7 +62,8 @@ private fun TrendingMovieContent(
             lazyMovieList = movieList.collectAsLazyPagingItems(),
             onMovieCardItemClick = { movieId ->
                 Screens.MovieDetail.navigateTo(navController, movieId)
-            }
+            },
+            contentPadding = contentPadding,
         )
     }
 }
