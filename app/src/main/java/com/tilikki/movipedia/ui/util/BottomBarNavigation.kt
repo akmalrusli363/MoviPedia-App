@@ -3,11 +3,10 @@ package com.tilikki.movipedia.ui.util
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigationDefaults
@@ -21,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.tilikki.movipedia.ui.theme.Orange700
 import com.tilikki.movipedia.ui.theme.WhiteAlt
 
@@ -36,9 +34,10 @@ fun TonedBottomNavigationBar(
     val backgroundColor = if (isLight) WhiteAlt else MaterialTheme.colors.primarySurface
     BottomAppBar(
         backgroundColor = backgroundColor,
+        contentPadding = PaddingValues(bottom = bottomBarPadding),
         contentColor = if (isLight) Orange700 else MaterialTheme.colors.onBackground,
-        modifier = modifier.background(backgroundColor).padding(bottom = bottomBarPadding),
-        elevation = 0.dp,
+        modifier = modifier,
+        elevation = elevation,
         content = content,
     )
 }

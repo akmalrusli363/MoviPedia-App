@@ -106,7 +106,8 @@ private fun MovieDetailContent(
                 modifier = Modifier.background(MaterialTheme.colors.primarySurface)
                     .padding(top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding())
             )
-        }
+        },
+        modifier = Modifier.padding(bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
     ) {
         Surface(
             modifier = Modifier
